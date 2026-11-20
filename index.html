@@ -1,0 +1,190 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Rock Paper Scissors</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- START SCREEN -->
+        <section id="start-screen" class="screen active">
+
+            <h1>Rock Paper Scissors</h1>
+
+            <p class="subtitle">Ready to challenge the computer?</p>
+
+            <div class="preview">
+                <img src="images/paper.svg" alt="Paper">
+                <img src="images/rock.svg" alt="Rock">
+                <img src="images/scissors.svg" alt="Scissors">
+            </div>
+
+            <button id="start-btn">Start Game</button>
+
+            <button id="instructions-btn" class="secondary">
+                How to Play
+            </button>
+
+            <p class="high-score">
+                Highest Score: <span id="high-score-start">0</span>
+            </p>
+
+        </section>
+
+        <!-- INSTRUCTIONS SCREEN -->
+        <section id="instructions-screen" class="screen">
+
+            <h1>How to Play</h1>
+
+            <div class="instructions">
+
+                <p>✊ Rock beats Scissors</p>
+                <p>✋ Paper beats Rock</p>
+                <p>✌️ Scissors beats Paper</p>
+
+                <hr>
+
+                <p>Choose your move to play against the computer.</p>
+
+                <p>First player to score 5 points wins!</p>
+
+                <p>
+                    You can also use your keyboard:
+                    <strong>R</strong> for Rock,
+                    <strong>P</strong> for Paper,
+                    <strong>S</strong> for Scissors.
+                </p>
+
+            </div>
+
+            <button id="back-btn" class="secondary">
+                Back
+            </button>
+
+        </section>
+
+        <!-- GAME SCREEN -->
+        <section id="game-screen" class="screen">
+
+            <h1>Rock Paper Scissors</h1>
+
+            <div class="scoreboard">
+
+                <div class="score-box">
+                    <p>YOU</p>
+                    <span id="player-score">0</span>
+                </div>
+
+                <div class="score-box">
+                    <p>COMPUTER</p>
+                    <span id="computer-score">0</span>
+                </div>
+
+            </div>
+
+            <div class="battle">
+
+                <div class="fighter">
+
+                    <h3>You</h3>
+
+                    <div class="hand-display">
+                        <img id="player-hand" src="images/rock.svg" alt="Your choice">
+                    </div>
+
+                </div>
+
+                <div class="versus">VS</div>
+
+                <div class="fighter">
+
+                    <h3>Computer</h3>
+
+                    <div class="hand-display">
+                        <img id="computer-hand" src="images/rock.svg" alt="Computer choice">
+                    </div>
+
+                </div>
+
+            </div>
+
+            <h2 id="result">Choose your move!</h2>
+
+            <p id="round-message">
+                Make your choice below.
+            </p>
+
+            <div class="choices">
+
+                <button class="choice-btn" data-choice="rock">
+                    <img src="images/rock.svg" alt="Rock">
+                    <span>Rock</span>
+                </button>
+
+                <button class="choice-btn" data-choice="paper">
+                    <img src="images/paper.svg" alt="Paper">
+                    <span>Paper</span>
+                </button>
+
+                <button class="choice-btn" data-choice="scissors">
+                    <img src="images/scissors.svg" alt="Scissors">
+                    <span>Scissors</span>
+                </button>
+
+            </div>
+
+            <p class="keyboard-info">
+                Keyboard: R · P · S
+            </p>
+
+            <p class="high-score">
+                High Score: <span id="high-score-game">0</span>
+            </p>
+
+            <button id="quit-btn" class="secondary">
+                Back to Menu
+            </button>
+
+        </section>
+
+        <!-- GAME OVER SCREEN -->
+        <section id="game-over-screen" class="screen">
+
+            <h1 id="game-over-title">Game Over!</h1>
+
+            <p id="final-message"></p>
+
+            <div class="final-score">
+
+                <p>Your Score</p>
+                <span id="final-score">0</span>
+
+            </div>
+
+            <p class="high-score">
+                High Score: <span id="high-score-final">0</span>
+            </p>
+
+            <button id="restart-btn">
+                Play Again
+            </button>
+
+            <button id="menu-btn" class="secondary">
+                Main Menu
+            </button>
+
+        </section>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
