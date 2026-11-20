@@ -1,190 +1,430 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Rock Paper Scissors</title>
+    <title>Bato-Bato Pick</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="container">
+<div class="container">
 
-        <!-- START SCREEN -->
-        <section id="start-screen" class="screen active">
+    <!-- LOGIN SCREEN -->
+    <section id="login-screen" class="screen active">
 
-            <h1>Rock Paper Scissors</h1>
+        <h1>🪨 Bato-Bato Pick</h1>
+        <p class="subtitle">Challenge the computer!</p>
 
-            <p class="subtitle">Ready to challenge the computer?</p>
+        <div class="auth-box">
 
-            <div class="preview">
-                <img src="images/paper.svg" alt="Paper">
-                <img src="images/rock.svg" alt="Rock">
-                <img src="images/scissors.svg" alt="Scissors">
-            </div>
+            <h2 id="auth-title">Login</h2>
 
-            <button id="start-btn">Start Game</button>
+            <input
+                type="text"
+                id="username-input"
+                placeholder="Username"
+                autocomplete="username"
+            >
 
-            <button id="instructions-btn" class="secondary">
-                How to Play
+            <input
+                type="password"
+                id="password-input"
+                placeholder="Password"
+                autocomplete="current-password"
+            >
+
+            <button id="auth-btn">Login</button>
+
+            <p id="auth-message"></p>
+
+            <button id="toggle-auth" class="secondary">
+                Create an account
             </button>
 
-            <p class="high-score">
-                Highest Score: <span id="high-score-start">0</span>
+        </div>
+
+    </section>
+
+
+    <!-- HOME SCREEN -->
+    <section id="home-screen" class="screen">
+
+        <h1>Bato-Bato Pick</h1>
+
+        <p class="subtitle">
+            Welcome, <span id="welcome-username"></span>!
+        </p>
+
+        <!-- PROFILE -->
+        <div class="profile-box">
+
+            <h2>Player Profile</h2>
+
+            <p>Total Points</p>
+
+            <span id="total-points" class="big-number">0</span>
+
+            <h3>Game History</h3>
+
+            <div id="history-list">
+                <p>No games played yet.</p>
+            </div>
+
+        </div>
+
+        <button id="home-start-btn">Start Game</button>
+
+        <button id="mechanics-btn" class="secondary">
+            Game Mechanics
+        </button>
+
+        <button id="logout-btn" class="secondary">
+            Logout
+        </button>
+
+    </section>
+
+
+    <!-- MECHANICS SCREEN -->
+    <section id="mechanics-screen" class="screen">
+
+        <h1>Game Mechanics</h1>
+
+        <div class="instructions">
+
+            <h3>Basic Rules</h3>
+
+            <p>✊ Rock beats Scissors</p>
+            <p>✋ Paper beats Rock</p>
+            <p>✌️ Scissors beats Paper</p>
+
+            <hr>
+
+            <h3>Scoring</h3>
+
+            <p>Win: +10 points</p>
+            <p>Draw: +5 points for both</p>
+            <p>Lose: 0 points</p>
+
+            <p>First to 5 match points wins.</p>
+
+            <p>At 4-4, enter Sudden Death.</p>
+
+            <p>The winner of Sudden Death gets 2 match points,
+            resulting in a 6-4 score.</p>
+
+            <hr>
+
+            <h3>Special Abilities</h3>
+
+            <p>
+                🔒 <strong>Kandado:</strong>
+                Block one move of the opponent.
             </p>
 
-        </section>
+            <p>
+                🔄 <strong>Bawi:</strong>
+                Change your move during the 2-second window.
+            </p>
 
-        <!-- INSTRUCTIONS SCREEN -->
-        <section id="instructions-screen" class="screen">
+            <p>
+                🔃 <strong>Baligtaran:</strong>
+                Reverse the winning rules for one round.
+            </p>
 
-            <h1>How to Play</h1>
+            <hr>
 
-            <div class="instructions">
+            <h3>Peek</h3>
 
-                <p>✊ Rock beats Scissors</p>
-                <p>✋ Paper beats Rock</p>
-                <p>✌️ Scissors beats Paper</p>
+            <p>
+                Costs 20 accumulated points.
+                Reveals two possible computer moves:
+                one correct and one decoy.
+            </p>
 
-                <hr>
+            <p>
+                The player must choose which move to use
+                based on the information revealed.
+            </p>
 
-                <p>Choose your move to play against the computer.</p>
+            <hr>
 
-                <p>First player to score 5 points wins!</p>
+            <h3>Win Streak</h3>
 
-                <p>
-                    You can also use your keyboard:
-                    <strong>R</strong> for Rock,
-                    <strong>P</strong> for Paper,
-                    <strong>S</strong> for Scissors.
+            <p>
+                Three consecutive wins unlock a random ability.
+            </p>
+
+        </div>
+
+        <button id="mechanics-back-btn" class="secondary">
+            Back to Home
+        </button>
+
+    </section>
+
+
+    <!-- GAME SCREEN -->
+    <section id="game-screen" class="screen">
+
+        <h1>Bato-Bato Pick</h1>
+
+        <p class="round-label">
+            Round <span id="round-number">1</span>
+        </p>
+
+        <!-- MATCH SCORE -->
+        <div class="scoreboard">
+
+            <div class="score-box">
+
+                <p id="game-username">PLAYER</p>
+
+                <span id="player-score">0</span>
+
+            </div>
+
+            <div class="score-box">
+
+                <p>COMPUTER</p>
+
+                <span id="computer-score">0</span>
+
+            </div>
+
+        </div>
+
+        <!-- ACCUMULATED POINTS -->
+        <div class="points-bar">
+
+            <p>Your Points: <span id="game-points">0</span></p>
+
+            <p>Computer Points: <span id="computer-points">0</span></p>
+
+        </div>
+
+        <!-- STREAK -->
+        <div id="streak-display">
+
+            🔥 Your Streak: <span id="player-streak">0</span>
+
+            <span class="divider">|</span>
+
+            🤖 Computer Streak:
+            <span id="computer-streak">0</span>
+
+        </div>
+
+        <!-- SPECIAL ABILITY -->
+        <div id="ability-box" class="ability-box">
+
+            <p id="ability-message">
+                No active ability.
+            </p>
+
+            <div id="lock-options" class="hidden">
+
+                <p>Choose a move to lock:</p>
+
+                <button class="lock-btn" data-lock="rock">
+                    Rock
+                </button>
+
+                <button class="lock-btn" data-lock="paper">
+                    Paper
+                </button>
+
+                <button class="lock-btn" data-lock="scissors">
+                    Scissors
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- REVERSE INDICATOR -->
+        <div id="reverse-banner" class="reverse-banner hidden">
+
+            ⚠️ REVERSE ACTIVE!
+
+            <p>The winning rules are reversed!</p>
+
+        </div>
+
+        <!-- BATTLE AREA -->
+        <div class="battle">
+
+            <div class="fighter">
+
+                <h3>You</h3>
+
+                <div class="hand-display">
+
+                    <img
+                        id="player-hand"
+                        src="images/rock.svg"
+                        alt="Your move"
+                    >
+
+                </div>
+
+            </div>
+
+            <div class="versus">VS</div>
+
+            <div class="fighter">
+
+                <h3>Computer</h3>
+
+                <div class="hand-display">
+
+                    <img
+                        id="computer-hand"
+                        src="images/rock.svg"
+                        alt="Computer move"
+                    >
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- RESULT -->
+        <h2 id="result">Choose your move!</h2>
+
+        <p id="round-message">
+            Select Rock, Paper, or Scissors.
+        </p>
+
+        <p id="countdown"></p>
+
+        <!-- PEEK -->
+        <div class="peek-box">
+
+            <button id="peek-btn" class="peek-btn">
+
+                👁️ Peek Computer Move (-20 Points)
+
+            </button>
+
+            <div id="peek-result" class="peek-result hidden">
+
+                <h3>Possible Computer Moves</h3>
+
+                <div class="peek-options">
+
+                    <div class="peek-card">
+
+                        <img id="peek-image-1" src="" alt="Possible move">
+
+                        <p id="peek-label-1"></p>
+
+                    </div>
+
+                    <div class="peek-card">
+
+                        <img id="peek-image-2" src="" alt="Possible move">
+
+                        <p id="peek-label-2"></p>
+
+                    </div>
+
+                </div>
+
+                <p class="peek-warning">
+                    One is correct. One is a decoy.
                 </p>
 
             </div>
 
-            <button id="back-btn" class="secondary">
-                Back
+        </div>
+
+        <!-- CHOICES -->
+        <div class="choices">
+
+            <button class="choice-btn" data-choice="rock">
+
+                <img src="images/rock.svg" alt="Rock">
+
+                <span>Rock</span>
+
             </button>
 
-        </section>
+            <button class="choice-btn" data-choice="paper">
 
-        <!-- GAME SCREEN -->
-        <section id="game-screen" class="screen">
+                <img src="images/paper.svg" alt="Paper">
 
-            <h1>Rock Paper Scissors</h1>
+                <span>Paper</span>
 
-            <div class="scoreboard">
-
-                <div class="score-box">
-                    <p>YOU</p>
-                    <span id="player-score">0</span>
-                </div>
-
-                <div class="score-box">
-                    <p>COMPUTER</p>
-                    <span id="computer-score">0</span>
-                </div>
-
-            </div>
-
-            <div class="battle">
-
-                <div class="fighter">
-
-                    <h3>You</h3>
-
-                    <div class="hand-display">
-                        <img id="player-hand" src="images/rock.svg" alt="Your choice">
-                    </div>
-
-                </div>
-
-                <div class="versus">VS</div>
-
-                <div class="fighter">
-
-                    <h3>Computer</h3>
-
-                    <div class="hand-display">
-                        <img id="computer-hand" src="images/rock.svg" alt="Computer choice">
-                    </div>
-
-                </div>
-
-            </div>
-
-            <h2 id="result">Choose your move!</h2>
-
-            <p id="round-message">
-                Make your choice below.
-            </p>
-
-            <div class="choices">
-
-                <button class="choice-btn" data-choice="rock">
-                    <img src="images/rock.svg" alt="Rock">
-                    <span>Rock</span>
-                </button>
-
-                <button class="choice-btn" data-choice="paper">
-                    <img src="images/paper.svg" alt="Paper">
-                    <span>Paper</span>
-                </button>
-
-                <button class="choice-btn" data-choice="scissors">
-                    <img src="images/scissors.svg" alt="Scissors">
-                    <span>Scissors</span>
-                </button>
-
-            </div>
-
-            <p class="keyboard-info">
-                Keyboard: R · P · S
-            </p>
-
-            <p class="high-score">
-                High Score: <span id="high-score-game">0</span>
-            </p>
-
-            <button id="quit-btn" class="secondary">
-                Back to Menu
             </button>
 
-        </section>
+            <button class="choice-btn" data-choice="scissors">
 
-        <!-- GAME OVER SCREEN -->
-        <section id="game-over-screen" class="screen">
+                <img src="images/scissors.svg" alt="Scissors">
 
-            <h1 id="game-over-title">Game Over!</h1>
+                <span>Scissors</span>
 
-            <p id="final-message"></p>
+            </button>
 
-            <div class="final-score">
+        </div>
 
-                <p>Your Score</p>
-                <span id="final-score">0</span>
+        <p class="keyboard-info">
+            Keyboard: R · P · S
+        </p>
 
-            </div>
+        <button id="quit-btn" class="secondary">
+            Back to Home
+        </button>
 
-            <p class="high-score">
-                High Score: <span id="high-score-final">0</span>
+    </section>
+
+
+    <!-- GAME OVER SCREEN -->
+    <section id="game-over-screen" class="screen">
+
+        <h1 id="game-over-title">Game Over!</h1>
+
+        <p id="final-message"></p>
+
+        <div class="final-score">
+
+            <h2>Final Match Score</h2>
+
+            <p>
+                <span id="final-player-score">0</span>
+                -
+                <span id="final-computer-score">0</span>
             </p>
 
-            <button id="restart-btn">
-                Play Again
-            </button>
+        </div>
 
-            <button id="menu-btn" class="secondary">
-                Main Menu
-            </button>
+        <div class="final-score">
 
-        </section>
+            <h2>Points Earned This Match</h2>
 
-    </div>
+            <p>
+                <span id="match-points-earned">0</span>
+            </p>
 
-    <script src="script.js"></script>
+        </div>
+
+        <button id="restart-btn">
+            Play Again
+        </button>
+
+        <button id="menu-btn" class="secondary">
+            Back to Home
+        </button>
+
+    </section>
+
+</div>
+
+<script src="script.js"></script>
 
 </body>
 </html>
