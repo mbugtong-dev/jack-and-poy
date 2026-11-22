@@ -8,11 +8,10 @@
 
     <title>Lucky Jack and Poy</title>
 
-    <!-- Google Fonts -->
+    <!-- Google Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Lilita+One&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
 
     <!-- CSS -->
     <link rel="stylesheet" href="style.css">
@@ -102,9 +101,7 @@
             <div class="welcome-art">
 
                 <img src="images/rock.svg" alt="Rock">
-
                 <img src="images/paper.svg" alt="Paper">
-
                 <img src="images/scissors.svg" alt="Scissors">
 
             </div>
@@ -114,17 +111,11 @@
 
             <div class="home-buttons">
 
-                <button
-                    id="home-start-btn"
-                    class="main-button"
-                >
+                <button id="home-start-btn" class="main-button">
                     START GAME
                 </button>
 
-                <button
-                    id="home-mechanics-btn"
-                    class="secondary"
-                >
+                <button id="home-mechanics-btn" class="secondary">
                     GAME MECHANICS
                 </button>
 
@@ -166,11 +157,7 @@
                     <span>PROFILE</span>
                 </button>
 
-
-                <div
-                    id="profile-dropdown"
-                    class="sidebar-dropdown hidden"
-                >
+                <div id="profile-dropdown" class="sidebar-dropdown hidden">
 
                     <div class="profile-info">
 
@@ -183,20 +170,15 @@
 
                     </div>
 
-
                     <div class="points-card">
 
                         <p>TOTAL POINTS</p>
 
-                        <span
-                            id="total-points"
-                            class="big-number"
-                        >
+                        <span id="total-points" class="big-number">
                             0
                         </span>
 
                     </div>
-
 
                     <div id="history-section">
 
@@ -225,23 +207,16 @@
                     <span>INFORMATION</span>
                 </button>
 
-
-                <div
-                    id="information-panel"
-                    class="sidebar-dropdown hidden"
-                >
+                <div id="information-panel" class="sidebar-dropdown hidden">
 
                     <h2>GAME INFORMATION</h2>
-
 
                     <div class="information-item">
 
                         <h3>Date of Creation</h3>
-
                         <p id="creation-date"></p>
 
                     </div>
-
 
                     <div class="information-item">
 
@@ -254,11 +229,9 @@
 
                     </div>
 
-
                     <div class="information-item">
 
                         <h3>Course / Section</h3>
-
                         <p>BTVTED-COMPRO-2A</p>
 
                     </div>
@@ -270,10 +243,7 @@
 
             <!-- LOGOUT -->
 
-            <button
-                id="logout-btn"
-                class="sidebar-btn logout-btn"
-            >
+            <button id="logout-btn" class="sidebar-btn logout-btn">
                 <img src="images/icons/power.svg" alt="Power icon">
                 <span>LOG OUT</span>
             </button>
@@ -287,7 +257,7 @@
          GAME MECHANICS
     ====================================== -->
 
-     <section id="mechanics-screen" class="screen">
+    <section id="mechanics-screen" class="screen">
 
         <div class="mechanics-content">
 
@@ -301,9 +271,7 @@
                 <h2>Basic Rules</h2>
 
                 <p> Rock beats Scissors.</p>
-
                 <p> Paper beats Rock.</p>
-
                 <p> Scissors beats Paper.</p>
 
                 <p>
@@ -320,9 +288,7 @@
                 <h2>Scoring System</h2>
 
                 <p>Win: +10 accumulated points.</p>
-
                 <p>Draw: +5 accumulated points for both players.</p>
-
                 <p>Lose: 0 accumulated points.</p>
 
                 <p>
@@ -404,7 +370,6 @@
                     that move during the round.
                 </p>
 
-
                 <h3>Bawi</h3>
 
                 <p>
@@ -412,7 +377,6 @@
                     selected move during the 2-second
                     Bawi window after the moves are revealed.
                 </p>
-
 
                 <h3>Baligtaran</h3>
 
@@ -465,16 +429,14 @@
 
             <!-- BACK -->
 
-            <button
-                id="mechanics-back-btn"
-                class="secondary"
-            >
+            <button id="mechanics-back-btn" class="secondary">
                 BACK TO HOME
             </button>
 
         </div>
 
     </section>
+
 
     <!-- =====================================
          GAME SCREEN
@@ -503,21 +465,17 @@
             <div class="score-box">
 
                 <p id="game-username">PLAYER</p>
-
                 <span id="player-score">0</span>
 
             </div>
-
 
             <div class="score-divider">
                 VS
             </div>
 
-
             <div class="score-box">
 
                 <p>COMPUTER</p>
-
                 <span id="computer-score">0</span>
 
             </div>
@@ -595,10 +553,7 @@
 
         <!-- REVERSE -->
 
-        <div
-            id="reverse-banner"
-            class="reverse-banner hidden"
-        >
+        <div id="reverse-banner" class="reverse-banner hidden">
 
             ⚠️ BALIGTARAN ACTIVE!
 
@@ -678,24 +633,15 @@
 
         <div class="peek-box">
 
-            <button
-                id="peek-btn"
-                class="peek-btn"
-            >
+            <button id="peek-btn" class="peek-btn">
                 👁️ PEEK COMPUTER MOVE (-20 POINTS)
             </button>
 
-
-            <div
-                id="peek-result"
-                class="peek-result hidden"
-            >
+            <div id="peek-result" class="peek-result hidden">
 
                 <h3>Possible Computer Moves</h3>
 
-
                 <div class="peek-options">
-
 
                     <div class="peek-card">
 
@@ -708,7 +654,6 @@
                         <p id="peek-label-1"></p>
 
                     </div>
-
 
                     <div class="peek-card">
 
@@ -724,7 +669,6 @@
 
                 </div>
 
-
                 <p class="peek-warning">
                     One is correct. One is a decoy.
                 </p>
@@ -734,15 +678,11 @@
         </div>
 
 
-        <!-- CHOICES -->
+        <!-- PLAYER CHOICES -->
 
         <div class="choices">
 
-
-            <button
-                class="choice-btn"
-                data-choice="rock"
-            >
+            <button class="choice-btn" data-choice="rock">
 
                 <img
                     src="images/rock.svg"
@@ -753,11 +693,7 @@
 
             </button>
 
-
-            <button
-                class="choice-btn"
-                data-choice="paper"
-            >
+            <button class="choice-btn" data-choice="paper">
 
                 <img
                     src="images/paper.svg"
@@ -768,11 +704,7 @@
 
             </button>
 
-
-            <button
-                class="choice-btn"
-                data-choice="scissors"
-            >
+            <button class="choice-btn" data-choice="scissors">
 
                 <img
                     src="images/scissors.svg"
@@ -795,10 +727,7 @@
 
         <!-- QUIT -->
 
-        <button
-            id="quit-btn"
-            class="secondary"
-        >
+        <button id="quit-btn" class="secondary">
             BACK TO HOME
         </button>
 
@@ -815,7 +744,6 @@
             GAME OVER!
         </h1>
 
-
         <p id="final-message"></p>
 
 
@@ -826,13 +754,9 @@
             <h2>FINAL MATCH SCORE</h2>
 
             <p>
-
                 <span id="final-player-score">0</span>
-
                 -
-
                 <span id="final-computer-score">0</span>
-
             </p>
 
         </div>
@@ -853,20 +777,14 @@
 
         <!-- PLAY AGAIN -->
 
-        <button
-            id="restart-btn"
-            class="main-button"
-        >
+        <button id="restart-btn" class="main-button">
             PLAY AGAIN
         </button>
 
 
         <!-- HOME -->
 
-        <button
-            id="menu-btn"
-            class="secondary"
-        >
+        <button id="menu-btn" class="secondary">
             BACK TO HOME
         </button>
 
@@ -880,5 +798,4 @@
 <script src="script.js"></script>
 
 </body>
-
 </html>

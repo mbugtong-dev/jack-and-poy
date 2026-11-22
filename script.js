@@ -21,12 +21,14 @@ const users = JSON.parse(
    DOM REFERENCES
 ========================================== */
 
+// Screens
 const loginScreen = document.getElementById("login-screen");
 const homeScreen = document.getElementById("home-screen");
 const mechanicsScreen = document.getElementById("mechanics-screen");
 const gameScreen = document.getElementById("game-screen");
 const gameOverScreen = document.getElementById("game-over-screen");
 
+// Authentication
 const usernameInput = document.getElementById("username-input");
 const passwordInput = document.getElementById("password-input");
 
@@ -34,6 +36,92 @@ const authButton = document.getElementById("auth-btn");
 const authTitle = document.getElementById("auth-title");
 const authMessage = document.getElementById("auth-message");
 const toggleAuthButton = document.getElementById("toggle-auth");
+
+// Sidebar
+const sidebar = document.getElementById("sidebar");
+const settingsButton = document.getElementById("settings-btn");
+const sidebarSettingsButton = document.getElementById("sidebar-settings-btn");
+const profileButton = document.getElementById("profile-dropdown-btn");
+const profileDropdown = document.getElementById("profile-dropdown");
+const informationButton = document.getElementById("information-btn");
+const informationPanel = document.getElementById("information-panel");
+
+// Game
+const roundNumberDisplay = document.getElementById("round-number");
+const playerScoreDisplay = document.getElementById("player-score");
+const computerScoreDisplay = document.getElementById("computer-score");
+const gamePointsDisplay = document.getElementById("game-points");
+const computerPointsDisplay = document.getElementById("computer-points");
+const playerStreakDisplay = document.getElementById("player-streak");
+const computerStreakDisplay = document.getElementById("computer-streak");
+
+const playerHand = document.getElementById("player-hand");
+const computerHand = document.getElementById("computer-hand");
+
+const resultDisplay = document.getElementById("result");
+const roundMessage = document.getElementById("round-message");
+const countdownDisplay = document.getElementById("countdown");
+const abilityMessage = document.getElementById("ability-message");
+
+const lockOptions = document.getElementById("lock-options");
+const reverseBanner = document.getElementById("reverse-banner");
+
+const choiceButtons = document.querySelectorAll(".choice-btn");
+const lockButtons = document.querySelectorAll(".lock-btn");
+
+const peekButton = document.getElementById("peek-btn");
+const peekResult = document.getElementById("peek-result");
+
+
+/* ==========================================
+   GAME VARIABLES
+========================================== */
+
+let playerScore = 0;
+let computerScore = 0;
+
+let playerPoints = 0;
+let computerPoints = 0;
+let matchPointsEarned = 0;
+
+let roundNumber = 1;
+
+let playerStreak = 0;
+let computerStreak = 0;
+
+let playerChoice = null;
+let computerChoice = null;
+
+let playerAbility = null;
+let playerLockChoice = null;
+
+let reverseActive = false;
+
+let peekUsed = false;
+let peekChoice = null;
+
+let roundActive = false;
+let gameEnded = false;
+let bawiWindow = false;
+
+// Ability milestones: 3, 6, 9, 12...
+let nextAbilityStreak = 3;
+
+// Timers
+let countdownTimer = null;
+let bawiTimer = null;
+let animationTimer = null;
+
+
+/* ==========================================
+   GAME ASSETS
+========================================== */
+
+const moveImages = {
+    rock: "images/rock.svg",
+    paper: "images/paper.svg",
+    scissors: "images/scissors.svg"
+};
 
 
 /* ==========================================
@@ -51,7 +139,7 @@ function showScreen(screen) {
 
 
 /* ==========================================
-   LOGIN / CREATE ACCOUNT
+   AUTHENTICATION
 ========================================== */
 
 toggleAuthButton.addEventListener("click", function() {
@@ -142,6 +230,7 @@ function handleAuthentication() {
     }
 
     authMessage.textContent = "";
+
     saveUsers();
     showHomeScreen();
 }
@@ -176,21 +265,8 @@ function showHomeScreen() {
 
 
 /* ==========================================
-   SETTINGS SIDEBAR
+   SIDEBAR
 ========================================== */
-
-const sidebar = document.getElementById("sidebar");
-const settingsButton = document.getElementById("settings-btn");
-const sidebarSettingsButton =
-    document.getElementById("sidebar-settings-btn");
-const profileButton =
-    document.getElementById("profile-dropdown-btn");
-const profileDropdown =
-    document.getElementById("profile-dropdown");
-const informationButton =
-    document.getElementById("information-btn");
-const informationPanel =
-    document.getElementById("information-panel");
 
 function closeSidebarPanels() {
     sidebar.classList.remove("open");
@@ -204,9 +280,7 @@ settingsButton.addEventListener("click", function() {
     informationPanel.classList.add("hidden");
 });
 
-sidebarSettingsButton.addEventListener("click", function() {
-    closeSidebarPanels();
-});
+sidebarSettingsButton.addEventListener("click", closeSidebarPanels);
 
 profileButton.addEventListener("click", function() {
     profileDropdown.classList.toggle("hidden");
@@ -235,21 +309,18 @@ document.getElementById("creation-date").textContent =
    LOGOUT
 ========================================== */
 
-document.getElementById("logout-btn").addEventListener(
-    "click",
-    function() {
-        stopGameTimers();
+document.getElementById("logout-btn").addEventListener("click", function() {
+    stopGameTimers();
 
-        currentUser = null;
+    currentUser = null;
 
-        usernameInput.value = "";
-        passwordInput.value = "";
-        authMessage.textContent = "";
+    usernameInput.value = "";
+    passwordInput.value = "";
+    authMessage.textContent = "";
 
-        closeSidebarPanels();
-        showScreen(loginScreen);
-    }
-);
+    closeSidebarPanels();
+    showScreen(loginScreen);
+});
 
 
 /* ==========================================
@@ -275,117 +346,8 @@ document.getElementById("mechanics-back-btn").addEventListener(
 
 
 /* ==========================================
-   GAME VARIABLES
+   GAME UTILITIES
 ========================================== */
-
-let playerScore = 0;
-let computerScore = 0;
-
-let playerPoints = 0;
-let computerPoints = 0;
-
-let matchPointsEarned = 0;
-
-let roundNumber = 1;
-
-let playerStreak = 0;
-let computerStreak = 0;
-
-let playerChoice = null;
-let computerChoice = null;
-
-let playerAbility = null;
-let playerLockChoice = null;
-let computerLockChoice = null;
-
-let reverseActive = false;
-
-let peekUsed = false;
-let peekChoice = null;
-
-let roundActive = false;
-let gameEnded = false;
-let bawiWindow = false;
-
-// Ability milestones: 3, 6, 9, 12...
-let nextAbilityStreak = 3;
-
-let countdownTimer = null;
-let bawiTimer = null;
-let animationTimer = null;
-
-
-/* ==========================================
-   GAME REFERENCES
-========================================== */
-
-const roundNumberDisplay =
-    document.getElementById("round-number");
-
-const playerScoreDisplay =
-    document.getElementById("player-score");
-
-const computerScoreDisplay =
-    document.getElementById("computer-score");
-
-const gamePointsDisplay =
-    document.getElementById("game-points");
-
-const computerPointsDisplay =
-    document.getElementById("computer-points");
-
-const playerStreakDisplay =
-    document.getElementById("player-streak");
-
-const computerStreakDisplay =
-    document.getElementById("computer-streak");
-
-const playerHand =
-    document.getElementById("player-hand");
-
-const computerHand =
-    document.getElementById("computer-hand");
-
-const resultDisplay =
-    document.getElementById("result");
-
-const roundMessage =
-    document.getElementById("round-message");
-
-const countdownDisplay =
-    document.getElementById("countdown");
-
-const abilityMessage =
-    document.getElementById("ability-message");
-
-const lockOptions =
-    document.getElementById("lock-options");
-
-const reverseBanner =
-    document.getElementById("reverse-banner");
-
-const choiceButtons =
-    document.querySelectorAll(".choice-btn");
-
-const lockButtons =
-    document.querySelectorAll(".lock-btn");
-
-const peekButton =
-    document.getElementById("peek-btn");
-
-const peekResult =
-    document.getElementById("peek-result");
-
-
-/* ==========================================
-   MOVE IMAGES
-========================================== */
-
-const moveImages = {
-    rock: "images/rock.svg",
-    paper: "images/paper.svg",
-    scissors: "images/scissors.svg"
-};
 
 function randomChoice() {
     const moves = ["rock", "paper", "scissors"];
@@ -395,11 +357,6 @@ function randomChoice() {
     ];
 }
 
-
-/* ==========================================
-   AVAILABLE POINTS
-========================================== */
-
 function getAvailablePoints() {
     if (!currentUser) {
         return playerPoints;
@@ -407,11 +364,6 @@ function getAvailablePoints() {
 
     return users[currentUser].points + playerPoints;
 }
-
-
-/* ==========================================
-   STOP GAME TIMERS
-========================================== */
 
 function stopGameTimers() {
     clearInterval(countdownTimer);
@@ -437,7 +389,6 @@ function startGame() {
 
     playerPoints = 0;
     computerPoints = 0;
-
     matchPointsEarned = 0;
 
     roundNumber = 1;
@@ -450,7 +401,6 @@ function startGame() {
 
     playerAbility = null;
     playerLockChoice = null;
-    computerLockChoice = null;
 
     reverseActive = false;
 
@@ -484,7 +434,6 @@ function resetRound() {
     computerChoice = null;
 
     playerLockChoice = null;
-    computerLockChoice = null;
 
     reverseActive = false;
 
@@ -528,7 +477,7 @@ function resetRound() {
 
 
 /* ==========================================
-   PREPARE ABILITY
+   SPECIAL ABILITY PREPARATION
 ========================================== */
 
 function prepareAbility() {
@@ -538,13 +487,10 @@ function prepareAbility() {
     reverseActive = false;
 
     if (!playerAbility) {
-        if (playerStreak >= 2) {
-            abilityMessage.textContent =
-                "Peek is unlocked! It costs 20 points.";
-        } else {
-            abilityMessage.textContent =
-                "No active ability.";
-        }
+        abilityMessage.textContent =
+            playerStreak >= 2
+                ? "Peek is unlocked! It costs 20 points."
+                : "No active ability.";
 
         return;
     }
@@ -583,11 +529,7 @@ function prepareAbility() {
 
 lockButtons.forEach(function(button) {
     button.addEventListener("click", function() {
-        if (playerAbility !== "Kandado") {
-            return;
-        }
-
-        if (roundActive) {
+        if (playerAbility !== "Kandado" || roundActive) {
             return;
         }
 
@@ -610,7 +552,7 @@ lockButtons.forEach(function(button) {
 
 
 /* ==========================================
-   COMPUTER CHOICE
+   COMPUTER MOVE
 ========================================== */
 
 function generateComputerChoice() {
@@ -634,7 +576,7 @@ function generateComputerChoice() {
 
 
 /* ==========================================
-   PEEK BUTTON STATE
+   PEEK
 ========================================== */
 
 function updatePeekButton() {
@@ -653,11 +595,6 @@ function updatePeekButton() {
         peekButton.disabled
     );
 }
-
-
-/* ==========================================
-   PEEK
-========================================== */
 
 peekButton.addEventListener("click", usePeek);
 
@@ -747,7 +684,7 @@ function usePeek() {
 
 
 /* ==========================================
-   PLAYER CHOICES
+   PLAYER MOVE INPUT
 ========================================== */
 
 choiceButtons.forEach(function(button) {
@@ -807,10 +744,7 @@ function playRound(choice) {
         return;
     }
 
-    if (
-        playerAbility === "Kandado" &&
-        !playerLockChoice
-    ) {
+    if (playerAbility === "Kandado" && !playerLockChoice) {
         roundMessage.textContent =
             "Choose a move to lock before playing.";
 
@@ -887,7 +821,6 @@ function revealMoves() {
     if (playerAbility === "Bawi") {
         showBawiWindow();
     } else {
-        // NEW: Wait 1.5 seconds before showing the result.
         animationTimer = setTimeout(function() {
             resolveRound();
         }, 1500);
@@ -930,7 +863,6 @@ function showBawiWindow() {
                 button.disabled = true;
             });
 
-            // NEW: Brief pause after Bawi before resolving.
             animationTimer = setTimeout(function() {
                 resolveRound();
             }, 1000);
@@ -940,7 +872,7 @@ function showBawiWindow() {
 
 
 /* ==========================================
-   CHANGE BAWI CHOICE
+   CHANGE BAWI MOVE
 ========================================== */
 
 function changeBawiChoice(choice) {
@@ -951,9 +883,7 @@ function changeBawiChoice(choice) {
     playerChoice = choice;
 
     playerHand.src = moveImages[playerChoice];
-
-    playerHand.alt =
-        "Your changed move: " + playerChoice;
+    playerHand.alt = "Your changed move: " + playerChoice;
 
     roundMessage.textContent =
         "Your move changed to " +
@@ -977,13 +907,7 @@ function resolveRound() {
         button.disabled = true;
     });
 
-    /*
-       IMPORTANT:
-       Keep roundActive TRUE while the result is displayed.
-       This prevents another round from starting too early.
-       resetRound() will set it to false.
-    */
-
+    // Keep the round active until the next round begins.
     const abilityUsedThisRound = playerAbility;
 
     let outcome = getWinner(
@@ -1000,9 +924,7 @@ function resolveRound() {
     }
 
 
-    /* ======================================
-       PLAYER WINS
-    ====================================== */
+    // PLAYER WINS
 
     if (outcome === "win") {
         playerScore++;
@@ -1012,7 +934,6 @@ function resolveRound() {
 
         playerStreak++;
 
-        // Computer lost, so its streak resets.
         computerStreak = 0;
 
         resultDisplay.textContent = "YOU WIN!";
@@ -1026,9 +947,7 @@ function resolveRound() {
     }
 
 
-    /* ======================================
-       PLAYER LOSES
-    ====================================== */
+    // PLAYER LOSES
 
     else if (outcome === "lose") {
         computerScore++;
@@ -1037,7 +956,6 @@ function resolveRound() {
 
         computerStreak++;
 
-        // Player lost, so the player's streak resets.
         playerStreak = 0;
 
         resultDisplay.textContent = "YOU LOSE!";
@@ -1051,9 +969,7 @@ function resolveRound() {
     }
 
 
-    /* ======================================
-       DRAW
-    ====================================== */
+    // DRAW
 
     else {
         playerPoints += 5;
@@ -1061,11 +977,7 @@ function resolveRound() {
 
         matchPointsEarned += 5;
 
-        /*
-           IMPORTANT:
-           Neither streak changes on a draw.
-           Both streaks remain exactly the same.
-        */
+        // Both streaks remain unchanged.
 
         resultDisplay.textContent = "DRAW!";
         resultDisplay.style.color = "#f2a900";
@@ -1077,16 +989,13 @@ function resolveRound() {
     }
 
 
-    /* ======================================
-       CONSUME USED ABILITY
-    ====================================== */
+    // CONSUME USED ABILITY
 
     if (abilityUsedThisRound) {
         playerAbility = null;
     }
 
     playerLockChoice = null;
-
     reverseActive = false;
 
     lockOptions.classList.add("hidden");
@@ -1096,29 +1005,22 @@ function resolveRound() {
     updatePeekButton();
 
 
-    /* ======================================
-       CHECK SPECIAL ABILITY UNLOCK
-    ====================================== */
+    // CHECK ABILITY UNLOCK
 
     checkAbilityUnlock();
 
 
-    /* ======================================
-       CHECK MATCH WIN
-    ====================================== */
+    // CHECK MATCH WIN
 
     if (checkGameOver()) {
         return;
     }
 
 
-    /* ======================================
-       NEXT ROUND
-    ====================================== */
+    // NEXT ROUND
 
     roundNumber++;
 
-    // Keep the result visible for 1.8 seconds.
     animationTimer = setTimeout(function() {
         resetRound();
     }, 1800);
@@ -1151,20 +1053,11 @@ function getWinner(player, computer) {
 ========================================== */
 
 function checkAbilityUnlock() {
-    /*
-       Unlock at 3 consecutive wins.
-       Next milestones: 6, 9, 12, etc.
-
-       Draws do not interrupt the streak.
-       Unlocking does not reset the streak.
-    */
-
     if (
         playerStreak >= nextAbilityStreak &&
         playerAbility === null
     ) {
         unlockAbility();
-
         nextAbilityStreak += 3;
     }
 }
@@ -1213,7 +1106,6 @@ function checkGameOver() {
     roundActive = false;
 
     stopGameTimers();
-
     finishGame(playerWon);
 
     return true;
@@ -1225,11 +1117,8 @@ function checkGameOver() {
 ========================================== */
 
 function finishGame(playerWon) {
-    const title =
-        document.getElementById("game-over-title");
-
-    const finalMessage =
-        document.getElementById("final-message");
+    const title = document.getElementById("game-over-title");
+    const finalMessage = document.getElementById("final-message");
 
     if (playerWon) {
         title.textContent = "YOU WIN!";
@@ -1252,7 +1141,7 @@ function finishGame(playerWon) {
     document.getElementById("match-points-earned").textContent =
         matchPointsEarned;
 
-    // Save remaining match points to the user's account.
+    // Save remaining match points.
     users[currentUser].points += playerPoints;
 
     users[currentUser].history.unshift({
@@ -1281,7 +1170,6 @@ function updateGameDisplay() {
     playerScoreDisplay.textContent = playerScore;
     computerScoreDisplay.textContent = computerScore;
 
-    // Saved points plus current match points.
     gamePointsDisplay.textContent =
         getAvailablePoints();
 
@@ -1315,11 +1203,8 @@ function updateHistory() {
         return;
     }
 
-    const historyList =
-        document.getElementById("history-list");
-
-    const history =
-        users[currentUser].history;
+    const historyList = document.getElementById("history-list");
+    const history = users[currentUser].history;
 
     if (!history || history.length === 0) {
         historyList.innerHTML =
@@ -1372,18 +1257,15 @@ function updateHistory() {
    QUIT GAME
 ========================================== */
 
-document.getElementById("quit-btn").addEventListener(
-    "click",
-    function() {
-        stopGameTimers();
+document.getElementById("quit-btn").addEventListener("click", function() {
+    stopGameTimers();
 
-        gameEnded = true;
-        roundActive = false;
-        bawiWindow = false;
+    gameEnded = true;
+    roundActive = false;
+    bawiWindow = false;
 
-        showHomeScreen();
-    }
-);
+    showHomeScreen();
+});
 
 
 /* ==========================================
