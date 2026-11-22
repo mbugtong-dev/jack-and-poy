@@ -1,96 +1,24 @@
+
 /* ==========================================
-   BATO-BATO PICK
-   LOGIN, PROFILE, SCORING, ABILITIES
+   LUCKY JACK AND POY
+   COMPLETE JAVASCRIPT
 ========================================== */
 
 
 /* ==========================================
-   VARIABLES
+   ACCOUNT SYSTEM
 ========================================== */
 
 let currentUser = null;
+let isCreatingAccount = false;
 
-let playerScore = 0;
-let computerScore = 0;
-
-let computerPoints = 0;
-let matchNetPoints = 0;
-
-let playerStreak = 0;
-let computerStreak = 0;
-
-let playerAbility = null;
-let computerAbility = null;
-
-let playerLockChoice = null;
-let computerLockChoice = null;
-
-let gameActive = false;
-let isPlaying = false;
-
-let roundNumber = 1;
-
-let computerChoice = null;
-let playerChoice = null;
-
-let peekUsed = false;
-let bawiWindow = false;
-let reverseActive = false;
-
-let roundTimer = null;
-
-const choices = ["rock", "paper", "scissors"];
-
-const winningScore = 5;
-
-const images = {
-    rock: "images/rock.svg",
-    paper: "images/paper.svg",
-    scissors: "images/scissors.svg"
-};
-
-const abilities = [
-    "kandado",
-    "bawi",
-    "reverse"
-];
+const users = JSON.parse(
+    localStorage.getItem("luckyJackUsers") || "{}"
+);
 
 
 /* ==========================================
-   LOCAL STORAGE
-========================================== */
-
-const USERS_KEY = "batoBatoUsers";
-
-function getUsers() {
-
-    return JSON.parse(localStorage.getItem(USERS_KEY)) || {};
-
-}
-
-function saveUsers(users) {
-
-    localStorage.setItem(USERS_KEY, JSON.stringify(users));
-
-}
-
-function saveCurrentUser() {
-
-    if (!currentUser) {
-        return;
-    }
-
-    const users = getUsers();
-
-    users[currentUser.username] = currentUser;
-
-    saveUsers(users);
-
-}
-
-
-/* ==========================================
-   SCREEN REFERENCES
+   DOM REFERENCES
 ========================================== */
 
 const loginScreen = document.getElementById("login-screen");
@@ -99,159 +27,130 @@ const mechanicsScreen = document.getElementById("mechanics-screen");
 const gameScreen = document.getElementById("game-screen");
 const gameOverScreen = document.getElementById("game-over-screen");
 
-
-/* ==========================================
-   SCREEN FUNCTION
-========================================== */
-
-function showScreen(screen) {
-
-    document.querySelectorAll(".screen").forEach(function(section) {
-
-        section.classList.remove("active");
-
-    });
-
-    screen.classList.add("active");
-
-}
-
-
-/* ==========================================
-   LOGIN / REGISTER
-========================================== */
-
-let isRegistering = false;
-
 const usernameInput = document.getElementById("username-input");
 const passwordInput = document.getElementById("password-input");
 
 const authButton = document.getElementById("auth-btn");
 const authTitle = document.getElementById("auth-title");
-
 const authMessage = document.getElementById("auth-message");
-const toggleAuth = document.getElementById("toggle-auth");
+const toggleAuthButton = document.getElementById("toggle-auth");
 
 
-toggleAuth.addEventListener("click", function() {
+/* ==========================================
+   SCREEN NAVIGATION
+========================================== */
 
-    isRegistering = !isRegistering;
+function showScreen(screen) {
+    document.querySelectorAll(".screen").forEach(function(item) {
+        item.classList.remove("active");
+    });
 
-    if (isRegistering) {
+    screen.classList.add("active");
+    closeSidebarPanels();
+}
 
-        authTitle.textContent = "Register";
 
-        authButton.textContent = "Create Account";
+/* ==========================================
+   LOGIN / CREATE ACCOUNT
+========================================== */
 
-        toggleAuth.textContent = "Already have an account? Login";
+toggleAuthButton.addEventListener("click", function() {
+    isCreatingAccount = !isCreatingAccount;
 
-    }
-
-    else {
-
-        authTitle.textContent = "Login";
-
-        authButton.textContent = "Login";
-
-        toggleAuth.textContent = "Create an account";
-
+    if (isCreatingAccount) {
+        authTitle.textContent = "CREATE ACCOUNT";
+        authButton.textContent = "REGISTER";
+        toggleAuthButton.textContent = "BACK TO LOGIN";
+        passwordInput.autocomplete = "new-password";
+    } else {
+        authTitle.textContent = "LOGIN";
+        authButton.textContent = "LOGIN";
+        toggleAuthButton.textContent = "CREATE AN ACCOUNT";
+        passwordInput.autocomplete = "current-password";
     }
 
     authMessage.textContent = "";
-
 });
 
+authButton.addEventListener("click", handleAuthentication);
 
-authButton.addEventListener("click", authenticate);
+passwordInput.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        handleAuthentication();
+    }
+});
 
+usernameInput.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        passwordInput.focus();
+    }
+});
 
-function authenticate() {
-
+function handleAuthentication() {
     const username = usernameInput.value.trim();
-
     const password = passwordInput.value.trim();
 
     if (!username || !password) {
-
         authMessage.textContent =
             "Please enter your username and password.";
-
         return;
-
     }
 
-    const users = getUsers();
-
-
-    /* REGISTER */
-
-    if (isRegistering) {
-
+    if (isCreatingAccount) {
         if (users[username]) {
-
-            authMessage.textContent =
-                "Username already exists.";
-
+            authMessage.textContent = "Username already exists.";
             return;
-
         }
 
         users[username] = {
-
-            username: username,
-
             password: password,
-
             points: 0,
-
             history: []
-
         };
 
-        saveUsers(users);
+        saveUsers();
 
-        authMessage.textContent =
-            "Account created successfully! You can now login.";
+        authMessage.textContent = "Account created successfully!";
 
-        isRegistering = false;
-
-        authTitle.textContent = "Login";
-
-        authButton.textContent = "Login";
-
-        toggleAuth.textContent = "Create an account";
+        isCreatingAccount = false;
+        authTitle.textContent = "LOGIN";
+        authButton.textContent = "LOGIN";
+        toggleAuthButton.textContent = "CREATE AN ACCOUNT";
 
         passwordInput.value = "";
-
         return;
-
     }
 
-
-    /* LOGIN */
-
     if (!users[username]) {
-
-        authMessage.textContent =
-            "Account not found.";
-
+        authMessage.textContent = "Account does not exist.";
         return;
-
     }
 
     if (users[username].password !== password) {
-
-        authMessage.textContent =
-            "Incorrect password.";
-
+        authMessage.textContent = "Incorrect password.";
         return;
-
     }
 
-    currentUser = users[username];
+    currentUser = username;
 
+    if (!Array.isArray(users[currentUser].history)) {
+        users[currentUser].history = [];
+    }
+
+    if (typeof users[currentUser].points !== "number") {
+        users[currentUser].points = 0;
+    }
+
+    authMessage.textContent = "";
+    saveUsers();
     showHomeScreen();
+}
 
+function saveUsers() {
+    localStorage.setItem(
+        "luckyJackUsers",
+        JSON.stringify(users)
+    );
 }
 
 
@@ -260,93 +159,265 @@ function authenticate() {
 ========================================== */
 
 function showHomeScreen() {
+    if (!currentUser) {
+        showScreen(loginScreen);
+        return;
+    }
 
     document.getElementById("welcome-username").textContent =
-        currentUser.username;
+        currentUser;
 
     document.getElementById("total-points").textContent =
-        currentUser.points;
+        users[currentUser].points;
 
-    displayHistory();
-
+    updateHistory();
     showScreen(homeScreen);
-
 }
 
 
 /* ==========================================
-   GAME HISTORY
+   SETTINGS SIDEBAR
 ========================================== */
 
-function displayHistory() {
+const sidebar = document.getElementById("sidebar");
+const settingsButton = document.getElementById("settings-btn");
+const sidebarSettingsButton =
+    document.getElementById("sidebar-settings-btn");
+const profileButton =
+    document.getElementById("profile-dropdown-btn");
+const profileDropdown =
+    document.getElementById("profile-dropdown");
+const informationButton =
+    document.getElementById("information-btn");
+const informationPanel =
+    document.getElementById("information-panel");
 
-    const historyList = document.getElementById("history-list");
+function closeSidebarPanels() {
+    sidebar.classList.remove("open");
+    profileDropdown.classList.add("hidden");
+    informationPanel.classList.add("hidden");
+}
 
-    historyList.innerHTML = "";
+settingsButton.addEventListener("click", function() {
+    sidebar.classList.toggle("open");
+    profileDropdown.classList.add("hidden");
+    informationPanel.classList.add("hidden");
+});
 
-    if (!currentUser.history || currentUser.history.length === 0) {
+sidebarSettingsButton.addEventListener("click", function() {
+    closeSidebarPanels();
+});
 
-        historyList.innerHTML =
-            "<p>No games played yet.</p>";
+profileButton.addEventListener("click", function() {
+    profileDropdown.classList.toggle("hidden");
+    informationPanel.classList.add("hidden");
+});
 
-        return;
+informationButton.addEventListener("click", function() {
+    informationPanel.classList.toggle("hidden");
+    profileDropdown.classList.add("hidden");
+});
 
-    }
 
-    currentUser.history.slice().reverse().forEach(function(game) {
+/* ==========================================
+   INFORMATION DATE
+========================================== */
 
-        const item = document.createElement("div");
-
-        item.className = "history-item";
-
-        item.innerHTML = `
-            <span>${game.date}</span>
-            <span>${game.result}</span>
-            <span>${game.score}</span>
-            <span>${game.points >= 0 ? "+" : ""}${game.points}</span>
-        `;
-
-        historyList.appendChild(item);
-
+document.getElementById("creation-date").textContent =
+    new Date().toLocaleDateString("en-PH", {
+        year: "numeric",
+        month: "long",
+        day: "numeric"
     });
 
-}
+
+/* ==========================================
+   LOGOUT
+========================================== */
+
+document.getElementById("logout-btn").addEventListener(
+    "click",
+    function() {
+        stopGameTimers();
+
+        currentUser = null;
+
+        usernameInput.value = "";
+        passwordInput.value = "";
+        authMessage.textContent = "";
+
+        closeSidebarPanels();
+        showScreen(loginScreen);
+    }
+);
 
 
 /* ==========================================
    HOME BUTTONS
 ========================================== */
 
-document.getElementById("home-start-btn")
-    .addEventListener("click", startGame);
+document.getElementById("home-start-btn").addEventListener(
+    "click",
+    startGame
+);
 
-
-document.getElementById("mechanics-btn")
-    .addEventListener("click", function() {
-
+document.getElementById("home-mechanics-btn").addEventListener(
+    "click",
+    function() {
         showScreen(mechanicsScreen);
+    }
+);
 
-    });
+document.getElementById("mechanics-back-btn").addEventListener(
+    "click",
+    showHomeScreen
+);
 
 
-document.getElementById("mechanics-back-btn")
-    .addEventListener("click", showHomeScreen);
+/* ==========================================
+   GAME VARIABLES
+========================================== */
+
+let playerScore = 0;
+let computerScore = 0;
+
+let playerPoints = 0;
+let computerPoints = 0;
+
+let matchPointsEarned = 0;
+
+let roundNumber = 1;
+
+let playerStreak = 0;
+let computerStreak = 0;
+
+let playerChoice = null;
+let computerChoice = null;
+
+let playerAbility = null;
+let playerLockChoice = null;
+let computerLockChoice = null;
+
+let reverseActive = false;
+
+let peekUsed = false;
+let peekChoice = null;
+
+let roundActive = false;
+let gameEnded = false;
+let bawiWindow = false;
+
+// Ability milestones: 3, 6, 9, 12...
+let nextAbilityStreak = 3;
+
+let countdownTimer = null;
+let bawiTimer = null;
+let animationTimer = null;
 
 
-document.getElementById("logout-btn")
-    .addEventListener("click", function() {
+/* ==========================================
+   GAME REFERENCES
+========================================== */
 
-        currentUser = null;
+const roundNumberDisplay =
+    document.getElementById("round-number");
 
-        usernameInput.value = "";
+const playerScoreDisplay =
+    document.getElementById("player-score");
 
-        passwordInput.value = "";
+const computerScoreDisplay =
+    document.getElementById("computer-score");
 
-        authMessage.textContent = "";
+const gamePointsDisplay =
+    document.getElementById("game-points");
 
-        showScreen(loginScreen);
+const computerPointsDisplay =
+    document.getElementById("computer-points");
 
-    });
+const playerStreakDisplay =
+    document.getElementById("player-streak");
+
+const computerStreakDisplay =
+    document.getElementById("computer-streak");
+
+const playerHand =
+    document.getElementById("player-hand");
+
+const computerHand =
+    document.getElementById("computer-hand");
+
+const resultDisplay =
+    document.getElementById("result");
+
+const roundMessage =
+    document.getElementById("round-message");
+
+const countdownDisplay =
+    document.getElementById("countdown");
+
+const abilityMessage =
+    document.getElementById("ability-message");
+
+const lockOptions =
+    document.getElementById("lock-options");
+
+const reverseBanner =
+    document.getElementById("reverse-banner");
+
+const choiceButtons =
+    document.querySelectorAll(".choice-btn");
+
+const lockButtons =
+    document.querySelectorAll(".lock-btn");
+
+const peekButton =
+    document.getElementById("peek-btn");
+
+const peekResult =
+    document.getElementById("peek-result");
+
+
+/* ==========================================
+   MOVE IMAGES
+========================================== */
+
+const moveImages = {
+    rock: "images/rock.svg",
+    paper: "images/paper.svg",
+    scissors: "images/scissors.svg"
+};
+
+function randomChoice() {
+    const moves = ["rock", "paper", "scissors"];
+
+    return moves[
+        Math.floor(Math.random() * moves.length)
+    ];
+}
+
+
+/* ==========================================
+   AVAILABLE POINTS
+========================================== */
+
+function getAvailablePoints() {
+    if (!currentUser) {
+        return playerPoints;
+    }
+
+    return users[currentUser].points + playerPoints;
+}
+
+
+/* ==========================================
+   STOP GAME TIMERS
+========================================== */
+
+function stopGameTimers() {
+    clearInterval(countdownTimer);
+    clearInterval(bawiTimer);
+    clearTimeout(animationTimer);
+}
 
 
 /* ==========================================
@@ -354,249 +425,324 @@ document.getElementById("logout-btn")
 ========================================== */
 
 function startGame() {
+    if (!currentUser) {
+        showScreen(loginScreen);
+        return;
+    }
+
+    stopGameTimers();
 
     playerScore = 0;
-
     computerScore = 0;
 
+    playerPoints = 0;
     computerPoints = 0;
 
-    matchNetPoints = 0;
-
-    playerStreak = 0;
-
-    computerStreak = 0;
-
-    playerAbility = null;
-
-    computerAbility = null;
-
-    playerLockChoice = null;
-
-    computerLockChoice = null;
-
-    gameActive = true;
-
-    isPlaying = false;
+    matchPointsEarned = 0;
 
     roundNumber = 1;
 
-    peekUsed = false;
+    playerStreak = 0;
+    computerStreak = 0;
 
-    bawiWindow = false;
+    playerChoice = null;
+    computerChoice = null;
+
+    playerAbility = null;
+    playerLockChoice = null;
+    computerLockChoice = null;
 
     reverseActive = false;
 
-    computerChoice = null;
+    peekUsed = false;
+    peekChoice = null;
 
-    playerChoice = null;
+    roundActive = false;
+    gameEnded = false;
+    bawiWindow = false;
 
-    updateScoreDisplay();
-
-    updatePointsDisplay();
-
-    updateStreakDisplay();
-
-    updateAbilityDisplay();
-
-    resetRoundDisplay();
+    nextAbilityStreak = 3;
 
     document.getElementById("game-username").textContent =
-        currentUser.username;
+        currentUser;
+
+    updateGameDisplay();
 
     showScreen(gameScreen);
-
+    resetRound();
 }
 
 
 /* ==========================================
-   SCORE DISPLAY
+   RESET ROUND
 ========================================== */
 
-function updateScoreDisplay() {
+function resetRound() {
+    stopGameTimers();
 
-    document.getElementById("player-score").textContent =
-        playerScore;
+    playerChoice = null;
+    computerChoice = null;
 
-    document.getElementById("computer-score").textContent =
-        computerScore;
+    playerLockChoice = null;
+    computerLockChoice = null;
 
-}
+    reverseActive = false;
 
+    peekUsed = false;
+    peekChoice = null;
 
-function updatePointsDisplay() {
+    roundActive = false;
+    bawiWindow = false;
 
-    document.getElementById("game-points").textContent =
-        currentUser.points;
+    choiceButtons.forEach(function(button) {
+        button.disabled = false;
+    });
 
-    document.getElementById("computer-points").textContent =
-        computerPoints;
+    lockOptions.classList.add("hidden");
+    reverseBanner.classList.add("hidden");
+    peekResult.classList.add("hidden");
 
-}
+    countdownDisplay.textContent = "";
 
+    playerHand.src = moveImages.rock;
+    computerHand.src = moveImages.rock;
 
-function updateStreakDisplay() {
+    playerHand.alt = "Your move";
+    computerHand.alt = "Computer move";
 
-    document.getElementById("player-streak").textContent =
-        playerStreak;
+    playerHand.classList.remove("shake");
+    computerHand.classList.remove("shake");
 
-    document.getElementById("computer-streak").textContent =
-        computerStreak;
-
-}
-
-
-/* ==========================================
-   RESET ROUND DISPLAY
-========================================== */
-
-function resetRoundDisplay() {
-
-    playerHand.src = images.rock;
-
-    computerHand.src = images.rock;
-
-    result.textContent = "Choose your move!";
+    resultDisplay.textContent = "Choose your move!";
+    resultDisplay.style.color = "";
 
     roundMessage.textContent =
         "Select Rock, Paper, or Scissors.";
 
-    document.getElementById("countdown").textContent = "";
+    roundNumberDisplay.textContent = roundNumber;
 
-    document.getElementById("round-number").textContent =
-        roundNumber;
-
-    document.getElementById("peek-result").classList.add("hidden");
-
-    document.getElementById("reverse-banner").classList.add("hidden");
-
-    document.getElementById("peek-btn").disabled = false;
-
-    document.getElementById("lock-options").classList.add("hidden");
-
-    peekUsed = false;
-
-    playerChoice = null;
-
-    computerChoice = null;
-
+    updateGameDisplay();
+    updatePeekButton();
+    prepareAbility();
 }
 
 
 /* ==========================================
-   GAME REFERENCES
+   PREPARE ABILITY
 ========================================== */
 
-const playerHand = document.getElementById("player-hand");
+function prepareAbility() {
+    lockOptions.classList.add("hidden");
+    reverseBanner.classList.add("hidden");
 
-const computerHand = document.getElementById("computer-hand");
+    reverseActive = false;
 
-const result = document.getElementById("result");
+    if (!playerAbility) {
+        if (playerStreak >= 2) {
+            abilityMessage.textContent =
+                "Peek is unlocked! It costs 20 points.";
+        } else {
+            abilityMessage.textContent =
+                "No active ability.";
+        }
 
-const roundMessage = document.getElementById("round-message");
+        return;
+    }
 
+    if (playerAbility === "Kandado") {
+        abilityMessage.textContent =
+            "KANDADO! Choose a move to lock for the computer.";
 
-/* ==========================================
-   RANDOM CHOICE
-========================================== */
+        lockOptions.classList.remove("hidden");
 
-function randomChoice() {
+        lockButtons.forEach(function(button) {
+            button.disabled = false;
+        });
+    }
 
-    return choices[Math.floor(Math.random() * choices.length)];
+    if (playerAbility === "Bawi") {
+        abilityMessage.textContent =
+            "BAWI is ready! You can change your move during the Bawi window.";
+    }
 
+    if (playerAbility === "Baligtaran") {
+        reverseActive = true;
+        reverseBanner.classList.remove("hidden");
+
+        abilityMessage.textContent =
+            "BALIGTARAN! Winning rules are reversed this round.";
+    }
+
+    updatePeekButton();
 }
 
 
-function randomAbility() {
+/* ==========================================
+   KANDADO
+========================================== */
 
-    return abilities[Math.floor(Math.random() * abilities.length)];
+lockButtons.forEach(function(button) {
+    button.addEventListener("click", function() {
+        if (playerAbility !== "Kandado") {
+            return;
+        }
 
+        if (roundActive) {
+            return;
+        }
+
+        playerLockChoice = button.dataset.lock;
+
+        abilityMessage.textContent =
+            "KANDADO: " +
+            playerLockChoice.toUpperCase() +
+            " is locked for the computer.";
+
+        lockOptions.classList.add("hidden");
+
+        lockButtons.forEach(function(item) {
+            item.disabled = true;
+        });
+
+        generateComputerChoice();
+    });
+});
+
+
+/* ==========================================
+   COMPUTER CHOICE
+========================================== */
+
+function generateComputerChoice() {
+    let availableMoves = [
+        "rock",
+        "paper",
+        "scissors"
+    ];
+
+    if (playerLockChoice) {
+        availableMoves = availableMoves.filter(function(move) {
+            return move !== playerLockChoice;
+        });
+    }
+
+    computerChoice =
+        availableMoves[
+            Math.floor(Math.random() * availableMoves.length)
+        ];
 }
 
 
 /* ==========================================
-   PEEK ABILITY
+   PEEK BUTTON STATE
 ========================================== */
 
-document.getElementById("peek-btn")
-    .addEventListener("click", usePeek);
+function updatePeekButton() {
+    const hasEnoughPoints = getAvailablePoints() >= 20;
+    const hasRequiredStreak = playerStreak >= 2;
 
+    peekButton.disabled =
+        !hasRequiredStreak ||
+        !hasEnoughPoints ||
+        peekUsed ||
+        roundActive ||
+        gameEnded;
+
+    peekButton.classList.toggle(
+        "disabled",
+        peekButton.disabled
+    );
+}
+
+
+/* ==========================================
+   PEEK
+========================================== */
+
+peekButton.addEventListener("click", usePeek);
 
 function usePeek() {
-
-    if (!gameActive || isPlaying || peekUsed) {
+    if (roundActive || peekUsed || gameEnded) {
         return;
     }
 
-    if (currentUser.points < 20) {
-
+    if (playerStreak < 2) {
         roundMessage.textContent =
-            "You need at least 20 points to Peek!";
+            "Win 2 consecutive rounds to unlock Peek.";
 
+        updatePeekButton();
         return;
-
     }
 
-    /* DEDUCT 20 POINTS */
+    if (getAvailablePoints() < 20) {
+        roundMessage.textContent =
+            "You need at least 20 points to use Peek.";
 
-    currentUser.points -= 20;
+        updatePeekButton();
+        return;
+    }
 
-    matchNetPoints -= 20;
+    if (!computerChoice) {
+        generateComputerChoice();
+    }
 
-    saveCurrentUser();
+    // Deduct saved points first.
+    const savedPoints = users[currentUser].points;
 
-    updatePointsDisplay();
+    if (savedPoints >= 20) {
+        users[currentUser].points -= 20;
+    } else {
+        const remainingCost = 20 - savedPoints;
+
+        users[currentUser].points = 0;
+        playerPoints -= remainingCost;
+    }
+
+    saveUsers();
 
     peekUsed = true;
 
-    document.getElementById("peek-btn").disabled = true;
+    const decoyMoves = [
+        "rock",
+        "paper",
+        "scissors"
+    ].filter(function(move) {
+        return move !== computerChoice;
+    });
 
+    const decoy =
+        decoyMoves[
+            Math.floor(Math.random() * decoyMoves.length)
+        ];
 
-    /* SET COMPUTER CHOICE */
+    const options = [
+        computerChoice,
+        decoy
+    ];
 
-    computerChoice = randomChoice();
-
-
-    /* CREATE DECOY */
-
-    let decoyChoice;
-
-    do {
-
-        decoyChoice = randomChoice();
-
-    } while (decoyChoice === computerChoice);
-
-
-    /* RANDOMIZE DISPLAY ORDER */
-
-    const peekChoices = Math.random() < 0.5
-        ? [computerChoice, decoyChoice]
-        : [decoyChoice, computerChoice];
-
-
-    /* DISPLAY POSSIBILITIES */
+    if (Math.random() > 0.5) {
+        options.reverse();
+    }
 
     document.getElementById("peek-image-1").src =
-        images[peekChoices[0]];
+        moveImages[options[0]];
 
     document.getElementById("peek-image-2").src =
-        images[peekChoices[1]];
+        moveImages[options[1]];
 
     document.getElementById("peek-label-1").textContent =
-        capitalize(peekChoices[0]);
+        options[0].toUpperCase();
 
     document.getElementById("peek-label-2").textContent =
-        capitalize(peekChoices[1]);
+        options[1].toUpperCase();
 
-
-    document.getElementById("peek-result")
-        .classList.remove("hidden");
-
+    peekResult.classList.remove("hidden");
 
     roundMessage.textContent =
         "Peek used! One move is correct and one is a decoy.";
 
+    updateGameDisplay();
+    updatePeekButton();
 }
 
 
@@ -604,39 +750,18 @@ function usePeek() {
    PLAYER CHOICES
 ========================================== */
 
-document.querySelectorAll(".choice-btn").forEach(function(button) {
-
+choiceButtons.forEach(function(button) {
     button.addEventListener("click", function() {
+        const choice = button.dataset.choice;
 
-        handlePlayerChoice(button.dataset.choice);
+        if (bawiWindow) {
+            changeBawiChoice(choice);
+            return;
+        }
 
+        playRound(choice);
     });
-
 });
-
-
-function handlePlayerChoice(choice) {
-
-    if (!gameActive || isPlaying) {
-        return;
-    }
-
-    /* BAWI WINDOW */
-
-    if (bawiWindow) {
-
-        playerChoice = choice;
-
-        roundMessage.textContent =
-            "Your move changed to " + capitalize(choice) + "!";
-
-        return;
-
-    }
-
-    playRound(choice);
-
-}
 
 
 /* ==========================================
@@ -644,59 +769,32 @@ function handlePlayerChoice(choice) {
 ========================================== */
 
 document.addEventListener("keydown", function(event) {
+    if (!gameScreen.classList.contains("active")) {
+        return;
+    }
 
-    if (!gameActive || !gameScreen.classList.contains("active")) {
+    if (event.target.tagName === "INPUT") {
         return;
     }
 
     const key = event.key.toLowerCase();
 
-    if (key === "r") {
+    let choice = null;
 
-        handlePlayerChoice("rock");
+    if (key === "r") choice = "rock";
+    if (key === "p") choice = "paper";
+    if (key === "s") choice = "scissors";
 
+    if (!choice) {
+        return;
     }
 
-    else if (key === "p") {
-
-        handlePlayerChoice("paper");
-
+    if (bawiWindow) {
+        changeBawiChoice(choice);
+        return;
     }
 
-    else if (key === "s") {
-
-        handlePlayerChoice("scissors");
-
-    }
-
-});
-
-
-/* ==========================================
-   KANDADO LOCK SELECTION
-========================================== */
-
-document.querySelectorAll(".lock-btn").forEach(function(button) {
-
-    button.addEventListener("click", function() {
-
-        if (playerAbility !== "kandado") {
-            return;
-        }
-
-        playerLockChoice = button.dataset.lock;
-
-        playerAbility = null;
-
-        document.getElementById("lock-options")
-            .classList.add("hidden");
-
-        document.getElementById("ability-message").textContent =
-            "🔒 You locked " + capitalize(playerLockChoice) +
-            " for the computer's next round!";
-
-    });
-
+    playRound(choice);
 });
 
 
@@ -705,135 +803,95 @@ document.querySelectorAll(".lock-btn").forEach(function(button) {
 ========================================== */
 
 function playRound(choice) {
-
-    if (!gameActive || isPlaying) {
+    if (roundActive || gameEnded) {
         return;
     }
 
-    /* PLAYER MUST USE KANDADO FIRST */
-
-    if (playerAbility === "kandado" && !playerLockChoice) {
-
+    if (
+        playerAbility === "Kandado" &&
+        !playerLockChoice
+    ) {
         roundMessage.textContent =
-            "Choose which move to lock first!";
-
-        document.getElementById("lock-options")
-            .classList.remove("hidden");
+            "Choose a move to lock before playing.";
 
         return;
-
     }
-
-    isPlaying = true;
 
     playerChoice = choice;
 
-
-    /* COMPUTER CHOICE */
-
     if (!computerChoice) {
-
-        computerChoice = randomChoice();
-
+        generateComputerChoice();
     }
 
+    roundActive = true;
 
-    /* COMPUTER KANDADO */
+    choiceButtons.forEach(function(button) {
+        button.disabled = true;
+    });
 
-    if (computerAbility === "kandado") {
+    updatePeekButton();
 
-        if (!computerLockChoice) {
-
-            computerLockChoice = randomChoice();
-
-        }
-
-        if (playerChoice === computerLockChoice) {
-
-            roundMessage.textContent =
-                capitalize(playerChoice) +
-                " is locked! Choose another move.";
-
-            isPlaying = false;
-
-            return;
-
-        }
-
-    }
-
-
-    /* PLAYER KANDADO */
-
-    if (playerLockChoice) {
-
-        while (computerChoice === playerLockChoice) {
-
-            computerChoice = randomChoice();
-
-        }
-
-    }
-
-
-    /* REVERSE */
-
-    reverseActive =
-        playerAbility === "reverse" ||
-        computerAbility === "reverse";
-
-
-    if (reverseActive) {
-
-        document.getElementById("reverse-banner")
-            .classList.remove("hidden");
-
-    }
-
-
-    /* SHOW ROCK BEFORE SHAKE */
-
-    playerHand.src = images.rock;
-
-    computerHand.src = images.rock;
-
-
-    /* START SHAKE */
+    playerHand.src = moveImages.rock;
+    computerHand.src = moveImages.rock;
 
     playerHand.classList.add("shake");
-
     computerHand.classList.add("shake");
 
+    resultDisplay.textContent = "READY...";
+    roundMessage.textContent = "The battle is beginning!";
 
-    /* COUNTDOWN */
+    let count = 3;
 
-    let countdown = 3;
+    countdownDisplay.textContent = count;
 
-    document.getElementById("countdown").textContent =
-        countdown;
+    countdownTimer = setInterval(function() {
+        count--;
 
+        if (count > 0) {
+            countdownDisplay.textContent = count;
+        } else {
+            clearInterval(countdownTimer);
 
-    roundTimer = setInterval(function() {
+            countdownDisplay.textContent = "SHOOT!";
 
-        countdown--;
+            playerHand.classList.remove("shake");
+            computerHand.classList.remove("shake");
 
-        if (countdown > 0) {
-
-            document.getElementById("countdown").textContent =
-                countdown;
-
+            revealMoves();
         }
+    }, 700);
+}
 
-        else {
 
-            clearInterval(roundTimer);
+/* ==========================================
+   REVEAL MOVES
+========================================== */
 
-            startBawiWindow();
+function revealMoves() {
+    playerHand.src = moveImages[playerChoice];
+    computerHand.src = moveImages[computerChoice];
 
-        }
+    playerHand.alt = "You chose " + playerChoice;
+    computerHand.alt = "Computer chose " + computerChoice;
 
-    }, 1000);
+    resultDisplay.textContent = "MOVES REVEALED!";
 
+    roundMessage.textContent =
+        "Your move: " +
+        playerChoice.toUpperCase() +
+        " | Computer: " +
+        computerChoice.toUpperCase();
+
+    countdownDisplay.textContent = "";
+
+    if (playerAbility === "Bawi") {
+        showBawiWindow();
+    } else {
+        // NEW: Wait 1.5 seconds before showing the result.
+        animationTimer = setTimeout(function() {
+            resolveRound();
+        }, 1500);
+    }
 }
 
 
@@ -841,81 +899,229 @@ function playRound(choice) {
    BAWI WINDOW
 ========================================== */
 
-function startBawiWindow() {
+function showBawiWindow() {
+    bawiWindow = true;
 
-    playerHand.classList.remove("shake");
+    abilityMessage.textContent =
+        "BAWI! Change your move now!";
 
-    computerHand.classList.remove("shake");
+    countdownDisplay.textContent = "BAWI: 2";
 
-    document.getElementById("countdown").textContent = "";
+    let seconds = 2;
 
+    choiceButtons.forEach(function(button) {
+        button.disabled = false;
+    });
 
-    /* COMPUTER BAWI */
+    bawiTimer = setInterval(function() {
+        seconds--;
 
-    if (computerAbility === "bawi") {
+        if (seconds > 0) {
+            countdownDisplay.textContent =
+                "BAWI: " + seconds;
+        } else {
+            clearInterval(bawiTimer);
 
-        computerChoice = randomChoice();
+            bawiWindow = false;
 
-    }
+            countdownDisplay.textContent = "TIME'S UP!";
 
+            choiceButtons.forEach(function(button) {
+                button.disabled = true;
+            });
 
-    /* PLAYER BAWI */
-
-    if (playerAbility === "bawi") {
-
-        bawiWindow = true;
-
-        roundMessage.textContent =
-            "BAWI! You have 2 seconds to change your move!";
-
-        let timeLeft = 2;
-
-        document.getElementById("countdown").textContent =
-            timeLeft;
-
-
-        const timer = setInterval(function() {
-
-            timeLeft--;
-
-            document.getElementById("countdown").textContent =
-                timeLeft > 0 ? timeLeft : "";
-
-            if (timeLeft <= 0) {
-
-                clearInterval(timer);
-
-                bawiWindow = false;
-
-                revealChoices();
-
-            }
-
-        }, 1000);
-
-    }
-
-    else {
-
-        revealChoices();
-
-    }
-
+            // NEW: Brief pause after Bawi before resolving.
+            animationTimer = setTimeout(function() {
+                resolveRound();
+            }, 1000);
+        }
+    }, 1000);
 }
 
 
 /* ==========================================
-   REVEAL CHOICES
+   CHANGE BAWI CHOICE
 ========================================== */
 
-function revealChoices() {
+function changeBawiChoice(choice) {
+    if (!bawiWindow || gameEnded) {
+        return;
+    }
 
-    playerHand.src = images[playerChoice];
+    playerChoice = choice;
 
-    computerHand.src = images[computerChoice];
+    playerHand.src = moveImages[playerChoice];
 
-    determineWinner(playerChoice, computerChoice);
+    playerHand.alt =
+        "Your changed move: " + playerChoice;
 
+    roundMessage.textContent =
+        "Your move changed to " +
+        playerChoice.toUpperCase() +
+        "!";
+}
+
+
+/* ==========================================
+   RESOLVE ROUND
+========================================== */
+
+function resolveRound() {
+    clearInterval(countdownTimer);
+    clearInterval(bawiTimer);
+    clearTimeout(animationTimer);
+
+    bawiWindow = false;
+
+    choiceButtons.forEach(function(button) {
+        button.disabled = true;
+    });
+
+    /*
+       IMPORTANT:
+       Keep roundActive TRUE while the result is displayed.
+       This prevents another round from starting too early.
+       resetRound() will set it to false.
+    */
+
+    const abilityUsedThisRound = playerAbility;
+
+    let outcome = getWinner(
+        playerChoice,
+        computerChoice
+    );
+
+    if (reverseActive) {
+        if (outcome === "win") {
+            outcome = "lose";
+        } else if (outcome === "lose") {
+            outcome = "win";
+        }
+    }
+
+
+    /* ======================================
+       PLAYER WINS
+    ====================================== */
+
+    if (outcome === "win") {
+        playerScore++;
+
+        playerPoints += 10;
+        matchPointsEarned += 10;
+
+        playerStreak++;
+
+        // Computer lost, so its streak resets.
+        computerStreak = 0;
+
+        resultDisplay.textContent = "YOU WIN!";
+        resultDisplay.style.color = "#2c9b42";
+
+        roundMessage.textContent =
+            playerChoice.toUpperCase() +
+            " beats " +
+            computerChoice.toUpperCase() +
+            "! +10 points";
+    }
+
+
+    /* ======================================
+       PLAYER LOSES
+    ====================================== */
+
+    else if (outcome === "lose") {
+        computerScore++;
+
+        computerPoints += 10;
+
+        computerStreak++;
+
+        // Player lost, so the player's streak resets.
+        playerStreak = 0;
+
+        resultDisplay.textContent = "YOU LOSE!";
+        resultDisplay.style.color = "#e84141";
+
+        roundMessage.textContent =
+            computerChoice.toUpperCase() +
+            " beats " +
+            playerChoice.toUpperCase() +
+            "!";
+    }
+
+
+    /* ======================================
+       DRAW
+    ====================================== */
+
+    else {
+        playerPoints += 5;
+        computerPoints += 5;
+
+        matchPointsEarned += 5;
+
+        /*
+           IMPORTANT:
+           Neither streak changes on a draw.
+           Both streaks remain exactly the same.
+        */
+
+        resultDisplay.textContent = "DRAW!";
+        resultDisplay.style.color = "#f2a900";
+
+        roundMessage.textContent =
+            "Both players chose " +
+            playerChoice.toUpperCase() +
+            "! +5 points each.";
+    }
+
+
+    /* ======================================
+       CONSUME USED ABILITY
+    ====================================== */
+
+    if (abilityUsedThisRound) {
+        playerAbility = null;
+    }
+
+    playerLockChoice = null;
+
+    reverseActive = false;
+
+    lockOptions.classList.add("hidden");
+    reverseBanner.classList.add("hidden");
+
+    updateGameDisplay();
+    updatePeekButton();
+
+
+    /* ======================================
+       CHECK SPECIAL ABILITY UNLOCK
+    ====================================== */
+
+    checkAbilityUnlock();
+
+
+    /* ======================================
+       CHECK MATCH WIN
+    ====================================== */
+
+    if (checkGameOver()) {
+        return;
+    }
+
+
+    /* ======================================
+       NEXT ROUND
+    ====================================== */
+
+    roundNumber++;
+
+    // Keep the result visible for 1.8 seconds.
+    animationTimer = setTimeout(function() {
+        resetRound();
+    }, 1800);
 }
 
 
@@ -923,351 +1129,119 @@ function revealChoices() {
    DETERMINE WINNER
 ========================================== */
 
-function determineWinner(player, computer) {
-
-    let winner;
-
-
-    /* DRAW */
-
+function getWinner(player, computer) {
     if (player === computer) {
-
-        winner = "draw";
-
+        return "draw";
     }
 
-
-    /* NORMAL RULES */
-
-    else if (
-
+    if (
         (player === "rock" && computer === "scissors") ||
-
         (player === "paper" && computer === "rock") ||
-
         (player === "scissors" && computer === "paper")
-
     ) {
-
-        winner = "player";
-
+        return "win";
     }
 
-    else {
-
-        winner = "computer";
-
-    }
-
-
-    /* REVERSE RULES */
-
-    if (reverseActive && winner !== "draw") {
-
-        winner = winner === "player"
-            ? "computer"
-            : "player";
-
-    }
-
-
-    /* UPDATE SCORES */
-
-    updateRoundScore(winner);
-
-
-    /* RESULT MESSAGE */
-
-    if (winner === "draw") {
-
-        result.textContent = "It's a Draw!";
-
-        roundMessage.textContent =
-            "Both chose " + capitalize(player) + "!";
-
-    }
-
-    else if (winner === "player") {
-
-        result.textContent = "You Win!";
-
-        roundMessage.textContent =
-            capitalize(player) + " vs " +
-            capitalize(computer);
-
-    }
-
-    else {
-
-        result.textContent = "You Lose!";
-
-        roundMessage.textContent =
-            capitalize(computer) + " beats " +
-            capitalize(player);
-
-    }
-
-
-    /* RESET USED ABILITIES */
-
-    playerAbility = null;
-
-    computerAbility = null;
-
-    playerLockChoice = null;
-
-    computerLockChoice = null;
-
-    reverseActive = false;
-
-    document.getElementById("reverse-banner")
-        .classList.add("hidden");
-
-    document.getElementById("lock-options")
-        .classList.add("hidden");
-
-
-    /* UPDATE DISPLAY */
-
-    updateScoreDisplay();
-
-    updatePointsDisplay();
-
-    updateStreakDisplay();
-
-    updateAbilityDisplay();
-
-
-    /* CHECK GAME OVER */
-
-    checkGameOver();
-
-
-    /* NEXT ROUND */
-
-    if (gameActive) {
-
-        roundNumber++;
-
-        setTimeout(function() {
-
-            resetRoundDisplay();
-
-            isPlaying = false;
-
-        }, 1500);
-
-    }
-
+    return "lose";
 }
 
 
 /* ==========================================
-   ROUND SCORING
+   SPECIAL ABILITY UNLOCK
 ========================================== */
 
-function updateRoundScore(winner) {
+function checkAbilityUnlock() {
+    /*
+       Unlock at 3 consecutive wins.
+       Next milestones: 6, 9, 12, etc.
 
+       Draws do not interrupt the streak.
+       Unlocking does not reset the streak.
+    */
 
-    /* DRAW */
+    if (
+        playerStreak >= nextAbilityStreak &&
+        playerAbility === null
+    ) {
+        unlockAbility();
 
-    if (winner === "draw") {
-
-        currentUser.points += 5;
-
-        computerPoints += 5;
-
-        matchNetPoints += 5;
-
-        playerStreak = 0;
-
-        computerStreak = 0;
-
+        nextAbilityStreak += 3;
     }
+}
 
+function unlockAbility() {
+    const abilities = [
+        "Kandado",
+        "Bawi",
+        "Baligtaran"
+    ];
 
-    /* PLAYER WINS */
+    playerAbility =
+        abilities[
+            Math.floor(Math.random() * abilities.length)
+        ];
 
-    else if (winner === "player") {
+    abilityMessage.textContent =
+        playerStreak +
+        "-WIN STREAK! You unlocked " +
+        playerAbility +
+        "!";
 
-        playerStreak++;
-
-        computerStreak = 0;
-
-
-        /*
-           EVERY ROUND ADDS ONE MATCH POINT.
-           THE GAME ONLY ENDS WHEN THERE IS
-           A 2-POINT LEAD AND AT LEAST 5 POINTS.
-        */
-
-        playerScore++;
-
-        currentUser.points += 10;
-
-        matchNetPoints += 10;
-
-
-        /* THREE CONSECUTIVE WINS */
-
-        if (playerStreak >= 3) {
-
-            playerAbility = randomAbility();
-
-            playerStreak = 0;
-
-            showAbilityMessage("player");
-
-        }
-
-    }
-
-
-    /* COMPUTER WINS */
-
-    else {
-
-        computerStreak++;
-
-        playerStreak = 0;
-
-
-        /* COMPUTER GETS ONE MATCH POINT */
-
-        computerScore++;
-
-        computerPoints += 10;
-
-
-        /* THREE CONSECUTIVE WINS */
-
-        if (computerStreak >= 3) {
-
-            computerAbility = randomAbility();
-
-            computerStreak = 0;
-
-            showAbilityMessage("computer");
-
-        }
-
-    }
-
-
-    saveCurrentUser();
-
+    roundMessage.textContent =
+        "Your next round will use your special ability.";
 }
 
 
 /* ==========================================
-   ABILITY MESSAGE
-========================================== */
-
-function showAbilityMessage(who) {
-
-    const ability =
-        who === "player"
-            ? playerAbility
-            : computerAbility;
-
-    const name =
-        ability === "kandado"
-            ? "Kandado"
-            : ability === "bawi"
-                ? "Bawi"
-                : "Baligtaran";
-
-
-    if (who === "player") {
-
-        document.getElementById("ability-message").textContent =
-            "🔥 3 WIN STREAK! You unlocked " + name + "!";
-
-        if (ability === "kandado") {
-
-            document.getElementById("lock-options")
-                .classList.remove("hidden");
-
-        }
-
-    }
-
-    else {
-
-        document.getElementById("ability-message").textContent =
-            "🤖 Computer unlocked " + name + "!";
-
-    }
-
-}
-
-
-/* ==========================================
-   ABILITY DISPLAY
-========================================== */
-
-function updateAbilityDisplay() {
-
-    if (!playerAbility && !computerAbility) {
-
-        document.getElementById("ability-message").textContent =
-            "No active ability.";
-
-    }
-
-}
-
-
-/* ==========================================
-   CHECK GAME COMPLETION
+   CHECK MATCH WIN
 ========================================== */
 
 function checkGameOver() {
-
-    const playerWonByTwo =
-        playerScore >= winningScore &&
+    const playerWon =
+        playerScore >= 5 &&
         playerScore - computerScore >= 2;
 
-    const computerWonByTwo =
-        computerScore >= winningScore &&
+    const computerWon =
+        computerScore >= 5 &&
         computerScore - playerScore >= 2;
 
-
-    if (playerWonByTwo || computerWonByTwo) {
-
-        gameActive = false;
-
-        isPlaying = false;
-
-        setTimeout(showGameOver, 1000);
-
+    if (!playerWon && !computerWon) {
+        return false;
     }
 
+    gameEnded = true;
+    roundActive = false;
+
+    stopGameTimers();
+
+    finishGame(playerWon);
+
+    return true;
 }
 
 
 /* ==========================================
-   GAME OVER SCREEN
+   FINISH GAME
 ========================================== */
 
-function showGameOver() {
+function finishGame(playerWon) {
+    const title =
+        document.getElementById("game-over-title");
 
-    const playerWon = playerScore > computerScore;
+    const finalMessage =
+        document.getElementById("final-message");
 
-    const gameResult = playerWon
-        ? "Victory"
-        : "Defeat";
+    if (playerWon) {
+        title.textContent = "YOU WIN!";
 
+        finalMessage.textContent =
+            "Congratulations! You defeated the computer!";
+    } else {
+        title.textContent = "YOU LOSE!";
 
-    document.getElementById("game-over-title").textContent =
-        playerWon ? "🏆 You Won!" : "Game Over!";
-
-
-    document.getElementById("final-message").textContent =
-        playerWon
-            ? "Congratulations! You defeated the computer!"
-            : "The computer won. Try again!";
-
+        finalMessage.textContent =
+            "Better luck next time!";
+    }
 
     document.getElementById("final-player-score").textContent =
         playerScore;
@@ -1275,76 +1249,165 @@ function showGameOver() {
     document.getElementById("final-computer-score").textContent =
         computerScore;
 
-
     document.getElementById("match-points-earned").textContent =
-        matchNetPoints;
+        matchPointsEarned;
 
+    // Save remaining match points to the user's account.
+    users[currentUser].points += playerPoints;
 
-    /* SAVE HISTORY */
-
-    currentUser.history.push({
-
-        date: new Date().toLocaleString(),
-
-        result: gameResult,
-
-        score: playerScore + " - " + computerScore,
-
-        points: matchNetPoints
-
+    users[currentUser].history.unshift({
+        date: new Date().toLocaleDateString(),
+        playerScore: playerScore,
+        computerScore: computerScore,
+        points: playerPoints,
+        result: playerWon ? "WIN" : "LOSS"
     });
 
+    users[currentUser].history =
+        users[currentUser].history.slice(0, 10);
 
-    saveCurrentUser();
+    saveUsers();
+    updateHistory();
 
     showScreen(gameOverScreen);
-
 }
 
 
 /* ==========================================
-   RESTART
+   UPDATE GAME DISPLAY
 ========================================== */
 
-document.getElementById("restart-btn")
-    .addEventListener("click", startGame);
+function updateGameDisplay() {
+    playerScoreDisplay.textContent = playerScore;
+    computerScoreDisplay.textContent = computerScore;
+
+    // Saved points plus current match points.
+    gamePointsDisplay.textContent =
+        getAvailablePoints();
+
+    computerPointsDisplay.textContent =
+        computerPoints;
+
+    playerStreakDisplay.textContent =
+        playerStreak;
+
+    computerStreakDisplay.textContent =
+        computerStreak;
+
+    roundNumberDisplay.textContent =
+        roundNumber;
+
+    if (currentUser) {
+        document.getElementById("total-points").textContent =
+            users[currentUser].points;
+    }
+
+    updatePeekButton();
+}
+
+
+/* ==========================================
+   GAME HISTORY
+========================================== */
+
+function updateHistory() {
+    if (!currentUser) {
+        return;
+    }
+
+    const historyList =
+        document.getElementById("history-list");
+
+    const history =
+        users[currentUser].history;
+
+    if (!history || history.length === 0) {
+        historyList.innerHTML =
+            "<p>No games played yet.</p>";
+
+        return;
+    }
+
+    historyList.innerHTML = "";
+
+    history.forEach(function(game) {
+        const item = document.createElement("div");
+
+        item.classList.add("history-item");
+
+        if (game.result === "WIN") {
+            item.classList.add("history-win");
+        } else if (game.result === "LOSS") {
+            item.classList.add("history-loss");
+        } else {
+            item.classList.add("history-draw");
+        }
+
+        const date = document.createElement("p");
+        date.textContent = game.date;
+
+        const score = document.createElement("p");
+        score.textContent =
+            game.result +
+            " (" +
+            game.playerScore +
+            " - " +
+            game.computerScore +
+            ")";
+
+        const points = document.createElement("p");
+        points.textContent =
+            "Points earned: " + game.points;
+
+        item.appendChild(date);
+        item.appendChild(score);
+        item.appendChild(points);
+
+        historyList.appendChild(item);
+    });
+}
+
+
+/* ==========================================
+   QUIT GAME
+========================================== */
+
+document.getElementById("quit-btn").addEventListener(
+    "click",
+    function() {
+        stopGameTimers();
+
+        gameEnded = true;
+        roundActive = false;
+        bawiWindow = false;
+
+        showHomeScreen();
+    }
+);
+
+
+/* ==========================================
+   PLAY AGAIN
+========================================== */
+
+document.getElementById("restart-btn").addEventListener(
+    "click",
+    startGame
+);
 
 
 /* ==========================================
    BACK TO HOME
 ========================================== */
 
-document.getElementById("menu-btn")
-    .addEventListener("click", showHomeScreen);
-
-
-document.getElementById("quit-btn")
-    .addEventListener("click", function() {
-
-        gameActive = false;
-
-        isPlaying = false;
-
-        bawiWindow = false;
-
-        if (roundTimer) {
-
-            clearInterval(roundTimer);
-
-        }
-
-        showHomeScreen();
-
-    });
+document.getElementById("menu-btn").addEventListener(
+    "click",
+    showHomeScreen
+);
 
 
 /* ==========================================
-   HELPER FUNCTION
+   INITIAL SCREEN
 ========================================== */
 
-function capitalize(word) {
-
-    return word.charAt(0).toUpperCase() +
-        word.slice(1);
-
-}
+showScreen(loginScreen);

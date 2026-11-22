@@ -1,182 +1,503 @@
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Jack and Poy</title>
+    <title>Lucky Jack and Poy</title>
 
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Lilita+One&family=Press+Start+2P&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <div class="container">
 
-    <!-- LOGIN SCREEN -->
+    <!-- =====================================
+         LOGIN SCREEN
+    ====================================== -->
+
     <section id="login-screen" class="screen active">
 
-        <h1>Jack and Poy</h1>
-        <p class="subtitle">Challenge the computer!</p>
+        <div class="login-content">
 
-        <div class="auth-box">
+            <div class="game-logo">
+                <h1>Lucky Jack and Poy</h1>
+                <p>Rock · Paper · Scissors</p>
+            </div>
 
-            <h2 id="auth-title">Login</h2>
+            <div class="auth-box">
 
-            <input
-                type="text"
-                id="username-input"
-                placeholder="Username"
-                autocomplete="username"
+                <h2 id="auth-title">LOGIN</h2>
+
+                <input
+                    type="text"
+                    id="username-input"
+                    placeholder="Username"
+                    autocomplete="username"
+                >
+
+                <input
+                    type="password"
+                    id="password-input"
+                    placeholder="Password"
+                    autocomplete="current-password"
+                >
+
+                <button id="auth-btn" class="main-button">
+                    LOGIN
+                </button>
+
+                <p id="auth-message"></p>
+
+                <button id="toggle-auth" class="secondary">
+                    CREATE AN ACCOUNT
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================
+         HOME SCREEN
+    ====================================== -->
+
+    <section id="home-screen" class="screen">
+
+        <!-- SETTINGS BUTTON -->
+
+        <button
+            id="settings-btn"
+            class="settings-btn"
+            aria-label="Open settings"
+        >
+            <img src="images/icons/settings.svg" alt="Settings">
+        </button>
+
+
+        <!-- HOME CONTENT -->
+
+        <div class="home-content">
+
+            <header class="page-header">
+                <h1>Lucky Jack and Poy</h1>
+                <p class="subtitle">LET THE BATTLE BEGIN!</p>
+            </header>
+
+
+            <!-- ROCK PAPER SCISSORS ART -->
+
+            <div class="welcome-art">
+
+                <img src="images/rock.svg" alt="Rock">
+
+                <img src="images/paper.svg" alt="Paper">
+
+                <img src="images/scissors.svg" alt="Scissors">
+
+            </div>
+
+
+            <!-- HOME BUTTONS -->
+
+            <div class="home-buttons">
+
+                <button
+                    id="home-start-btn"
+                    class="main-button"
+                >
+                    START GAME
+                </button>
+
+                <button
+                    id="home-mechanics-btn"
+                    class="secondary"
+                >
+                    GAME MECHANICS
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================
+             SETTINGS SIDEBAR
+        ====================================== -->
+
+        <aside id="sidebar" class="sidebar">
+
+            <!-- CLOSE SETTINGS -->
+
+            <div class="sidebar-logo">
+
+                <button
+                    id="sidebar-settings-btn"
+                    class="sidebar-settings-btn"
+                    aria-label="Close settings"
+                >
+                    <img src="images/icons/exit.svg" alt="Settings">
+                </button>
+
+            </div>
+
+
+            <!-- PROFILE -->
+
+            <div class="sidebar-section">
+
+                <button
+                    id="profile-dropdown-btn"
+                    class="sidebar-btn"
+                >
+                    <img src="images/icons/profile.svg" alt="head">
+                    <span>PROFILE</span>
+                </button>
+
+
+                <div
+                    id="profile-dropdown"
+                    class="sidebar-dropdown hidden"
+                >
+
+                    <div class="profile-info">
+
+                        <h2>PLAYER PROFILE</h2>
+
+                        <p>
+                            Player:
+                            <span id="welcome-username"></span>
+                        </p>
+
+                    </div>
+
+
+                    <div class="points-card">
+
+                        <p>TOTAL POINTS</p>
+
+                        <span
+                            id="total-points"
+                            class="big-number"
+                        >
+                            0
+                        </span>
+
+                    </div>
+
+
+                    <div id="history-section">
+
+                        <h3>GAME HISTORY</h3>
+
+                        <div id="history-list">
+                            <p>No games played yet.</p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- INFORMATION -->
+
+            <div class="sidebar-section">
+
+                <button
+                    id="information-btn"
+                    class="sidebar-btn"
+                >
+                    <img src="images/icons/info.svg" alt="Information icon">
+                    <span>INFORMATION</span>
+                </button>
+
+
+                <div
+                    id="information-panel"
+                    class="sidebar-dropdown hidden"
+                >
+
+                    <h2>GAME INFORMATION</h2>
+
+
+                    <div class="information-item">
+
+                        <h3>Date of Creation</h3>
+
+                        <p id="creation-date"></p>
+
+                    </div>
+
+
+                    <div class="information-item">
+
+                        <h3>Creators</h3>
+
+                        <p>Bugtong</p>
+                        <p>Fernandez</p>
+                        <p>Salvador</p>
+                        <p>Vera</p>
+
+                    </div>
+
+
+                    <div class="information-item">
+
+                        <h3>Course / Section</h3>
+
+                        <p>BTVTED-COMPRO-2A</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- LOGOUT -->
+
+            <button
+                id="logout-btn"
+                class="sidebar-btn logout-btn"
             >
+                <img src="images/icons/power.svg" alt="Power icon">
+                <span>LOG OUT</span>
+            </button>
 
-            <input
-                type="password"
-                id="password-input"
-                placeholder="Password"
-                autocomplete="current-password"
+        </aside>
+
+    </section>
+
+
+    <!-- =====================================
+         GAME MECHANICS
+    ====================================== -->
+
+     <section id="mechanics-screen" class="screen">
+
+        <div class="mechanics-content">
+
+            <h1>GAME MECHANICS</h1>
+
+
+            <!-- BASIC RULES -->
+
+            <div class="mechanics-item">
+
+                <h2>Basic Rules</h2>
+
+                <p> Rock beats Scissors.</p>
+
+                <p> Paper beats Rock.</p>
+
+                <p> Scissors beats Paper.</p>
+
+                <p>
+                    Players choose their moves simultaneously.
+                </p>
+
+            </div>
+
+
+            <!-- SCORING -->
+
+            <div class="mechanics-item">
+
+                <h2>Scoring System</h2>
+
+                <p>Win: +10 accumulated points.</p>
+
+                <p>Draw: +5 accumulated points for both players.</p>
+
+                <p>Lose: 0 accumulated points.</p>
+
+                <p>
+                    Match points are awarded for each round won.
+                </p>
+
+                <p>
+                    The first player to reach 5 match points
+                    must have a lead of at least 2 points
+                    to win the match.
+                </p>
+
+                <p>
+                    At 4–4, the match continues. A round win
+                    makes the score 5–4, but the player must
+                    win another round to finish the match.
+                </p>
+
+                <p>
+                    If the score becomes 5–5, the match continues
+                    until one player leads by 2 points.
+                </p>
+
+            </div>
+
+
+            <!-- STREAK SYSTEM -->
+
+            <div class="mechanics-item">
+
+                <h2>Streak System</h2>
+
+                <p>
+                    Each consecutive round win increases
+                    the winner's streak by 1.
+                </p>
+
+                <p>
+                    When a player loses, their streak resets to 0.
+                </p>
+
+                <p>
+                    During a draw, both players keep their
+                    current streaks. Neither streak increases
+                    nor resets.
+                </p>
+
+                <p>
+                    The same streak rules apply to both
+                    the player and the computer.
+                </p>
+
+            </div>
+
+
+            <!-- SPECIAL ABILITIES -->
+
+            <div class="mechanics-item">
+
+                <h2>Special Abilities</h2>
+
+                <p>
+                    Three consecutive wins unlock a random
+                    special ability. Additional abilities can
+                    be unlocked at 6, 9, 12, and so on,
+                    provided no ability is currently waiting to be used.
+                </p>
+
+                <p>
+                    Unlocking an ability does not reset
+                    the player's streak.
+                </p>
+
+                <h3>Kandado</h3>
+
+                <p>
+                    Allows the player to lock one move,
+                    preventing the computer from choosing
+                    that move during the round.
+                </p>
+
+
+                <h3>Bawi</h3>
+
+                <p>
+                    Allows the player to change their
+                    selected move during the 2-second
+                    Bawi window after the moves are revealed.
+                </p>
+
+
+                <h3>Baligtaran</h3>
+
+                <p>
+                    Reverses the normal winning rules
+                    for one round.
+                </p>
+
+            </div>
+
+
+            <!-- PEEK -->
+
+            <div class="mechanics-item">
+
+                <h2>Peek</h2>
+
+                <p>
+                    Peek becomes available after reaching
+                    a streak of 2 consecutive wins.
+                </p>
+
+                <p>
+                    Each use costs 20 accumulated points.
+                </p>
+
+                <p>
+                    It reveals two possible computer moves.
+                    One is the computer's actual move,
+                    and the other is a decoy.
+                </p>
+
+                <p>
+                    The player must choose which move
+                    to use based on the revealed information.
+                </p>
+
+                <p>
+                    Peek can be used once per round.
+                </p>
+
+                <p>
+                    A draw preserves the streak and keeps
+                    Peek unlocked. Losing resets the streak
+                    and locks Peek again.
+                </p>
+
+            </div>
+
+
+            <!-- BACK -->
+
+            <button
+                id="mechanics-back-btn"
+                class="secondary"
             >
-
-            <button id="auth-btn">Login</button>
-
-            <p id="auth-message"></p>
-
-            <button id="toggle-auth" class="secondary">
-                Create an account
+                BACK TO HOME
             </button>
 
         </div>
 
     </section>
 
+    <!-- =====================================
+         GAME SCREEN
+    ====================================== -->
 
-    <!-- HOME SCREEN -->
-    <section id="home-screen" class="screen">
-
-        <h1>Jack and Poy</h1>
-
-        <p class="subtitle">
-            Welcome, <span id="welcome-username"></span>!
-        </p>
-
-        <!-- PROFILE -->
-        <div class="profile-box">
-
-            <h2>Player Profile</h2>
-
-            <p>Total Points</p>
-
-            <span id="total-points" class="big-number">0</span>
-
-            <h3>Game History</h3>
-
-            <div id="history-list">
-                <p>No games played yet.</p>
-            </div>
-
-        </div>
-
-        <button id="home-start-btn">Start Game</button>
-
-        <button id="mechanics-btn" class="secondary">
-            Game Mechanics
-        </button>
-
-        <button id="logout-btn" class="secondary">
-            Logout
-        </button>
-
-    </section>
-
-
-    <!-- MECHANICS SCREEN -->
-    <section id="mechanics-screen" class="screen">
-
-        <h1>Game Mechanics</h1>
-
-        <div class="instructions">
-
-            <h3>Basic Rules</h3>
-
-            <p>✊ Rock beats Scissors</p>
-            <p>✋ Paper beats Rock</p>
-            <p>✌️ Scissors beats Paper</p>
-
-            <hr>
-
-            <h3>Scoring</h3>
-
-            <p>Win: +10 points</p>
-            <p>Draw: +5 points for both</p>
-            <p>Lose: 0 points</p>
-
-            <p>First to 5 match points wins.</p>
-
-            <p>At 4-4, enter Sudden Death.</p>
-
-            <p>The winner of Sudden Death gets 2 match points,
-            resulting in a 6-4 score.</p>
-
-            <hr>
-
-            <h3>Special Abilities</h3>
-
-            <p>
-                🔒 <strong>Kandado:</strong>
-                Block one move of the opponent.
-            </p>
-
-            <p>
-                🔄 <strong>Bawi:</strong>
-                Change your move during the 2-second window.
-            </p>
-
-            <p>
-                🔃 <strong>Baligtaran:</strong>
-                Reverse the winning rules for one round.
-            </p>
-
-            <hr>
-
-            <h3>Peek</h3>
-
-            <p>
-                Costs 20 accumulated points.
-                Reveals two possible computer moves:
-                one correct and one decoy.
-            </p>
-
-            <p>
-                The player must choose which move to use
-                based on the information revealed.
-            </p>
-
-            <hr>
-
-            <h3>Win Streak</h3>
-
-            <p>
-                Three consecutive wins unlock a random ability.
-            </p>
-
-        </div>
-
-        <button id="mechanics-back-btn" class="secondary">
-            Back to Home
-        </button>
-
-    </section>
-
-
-    <!-- GAME SCREEN -->
     <section id="game-screen" class="screen">
 
-        <h1>Jack and Poy</h1>
 
-        <p class="round-label">
-            Round <span id="round-number">1</span>
-        </p>
+        <!-- GAME HEADER -->
+
+        <header class="game-header">
+
+            <h1>Lucky Jack and Poy</h1>
+
+            <p class="round-label">
+                ROUND <span id="round-number">1</span>
+            </p>
+
+        </header>
+
 
         <!-- MATCH SCORE -->
+
         <div class="scoreboard">
 
             <div class="score-box">
@@ -186,6 +507,12 @@
                 <span id="player-score">0</span>
 
             </div>
+
+
+            <div class="score-divider">
+                VS
+            </div>
+
 
             <div class="score-box">
 
@@ -197,69 +524,101 @@
 
         </div>
 
+
         <!-- ACCUMULATED POINTS -->
+
         <div class="points-bar">
 
-            <p>Your Points: <span id="game-points">0</span></p>
+            <p>
+                Your Points:
+                <span id="game-points">0</span>
+            </p>
 
-            <p>Computer Points: <span id="computer-points">0</span></p>
+            <p>
+                Computer Points:
+                <span id="computer-points">0</span>
+            </p>
 
         </div>
 
+
         <!-- STREAK -->
+
         <div id="streak-display">
 
-            🔥 Your Streak: <span id="player-streak">0</span>
+            <span>
+                Your Streak:
+                <span id="player-streak">0</span>
+            </span>
 
             <span class="divider">|</span>
 
-            🤖 Computer Streak:
-            <span id="computer-streak">0</span>
+            <span>
+                Computer Streak:
+                <span id="computer-streak">0</span>
+            </span>
 
         </div>
 
-        <!-- SPECIAL ABILITY -->
+
+        <!-- ABILITY -->
+
         <div id="ability-box" class="ability-box">
 
             <p id="ability-message">
                 No active ability.
             </p>
 
+
+            <!-- KANDADO OPTIONS -->
+
             <div id="lock-options" class="hidden">
 
                 <p>Choose a move to lock:</p>
 
                 <button class="lock-btn" data-lock="rock">
-                    Rock
+                    ROCK
                 </button>
 
                 <button class="lock-btn" data-lock="paper">
-                    Paper
+                    PAPER
                 </button>
 
                 <button class="lock-btn" data-lock="scissors">
-                    Scissors
+                    SCISSORS
                 </button>
 
             </div>
 
         </div>
 
-        <!-- REVERSE INDICATOR -->
-        <div id="reverse-banner" class="reverse-banner hidden">
 
-            ⚠️ REVERSE ACTIVE!
+        <!-- REVERSE -->
 
-            <p>The winning rules are reversed!</p>
+        <div
+            id="reverse-banner"
+            class="reverse-banner hidden"
+        >
+
+            ⚠️ BALIGTARAN ACTIVE!
+
+            <p>
+                The winning rules are reversed!
+            </p>
 
         </div>
 
+
         <!-- BATTLE AREA -->
+
         <div class="battle">
+
+
+            <!-- PLAYER -->
 
             <div class="fighter">
 
-                <h3>You</h3>
+                <h3>YOU</h3>
 
                 <div class="hand-display">
 
@@ -273,11 +632,19 @@
 
             </div>
 
-            <div class="versus">VS</div>
+
+            <!-- VERSUS -->
+
+            <div class="versus">
+                VS
+            </div>
+
+
+            <!-- COMPUTER -->
 
             <div class="fighter">
 
-                <h3>Computer</h3>
+                <h3>COMPUTER</h3>
 
                 <div class="hand-display">
 
@@ -293,8 +660,12 @@
 
         </div>
 
-        <!-- RESULT -->
-        <h2 id="result">Choose your move!</h2>
+
+        <!-- ROUND RESULT -->
+
+        <h2 id="result">
+            Choose your move!
+        </h2>
 
         <p id="round-message">
             Select Rock, Paper, or Scissors.
@@ -302,38 +673,57 @@
 
         <p id="countdown"></p>
 
+
         <!-- PEEK -->
+
         <div class="peek-box">
 
-            <button id="peek-btn" class="peek-btn">
-
-                👁️ Peek Computer Move (-20 Points)
-
+            <button
+                id="peek-btn"
+                class="peek-btn"
+            >
+                👁️ PEEK COMPUTER MOVE (-20 POINTS)
             </button>
 
-            <div id="peek-result" class="peek-result hidden">
+
+            <div
+                id="peek-result"
+                class="peek-result hidden"
+            >
 
                 <h3>Possible Computer Moves</h3>
 
+
                 <div class="peek-options">
+
 
                     <div class="peek-card">
 
-                        <img id="peek-image-1" src="" alt="Possible move">
+                        <img
+                            id="peek-image-1"
+                            src=""
+                            alt="Possible move"
+                        >
 
                         <p id="peek-label-1"></p>
 
                     </div>
 
+
                     <div class="peek-card">
 
-                        <img id="peek-image-2" src="" alt="Possible move">
+                        <img
+                            id="peek-image-2"
+                            src=""
+                            alt="Possible move"
+                        >
 
                         <p id="peek-label-2"></p>
 
                     </div>
 
                 </div>
+
 
                 <p class="peek-warning">
                     One is correct. One is a decoy.
@@ -343,68 +733,116 @@
 
         </div>
 
+
         <!-- CHOICES -->
+
         <div class="choices">
 
-            <button class="choice-btn" data-choice="rock">
 
-                <img src="images/rock.svg" alt="Rock">
+            <button
+                class="choice-btn"
+                data-choice="rock"
+            >
 
-                <span>Rock</span>
+                <img
+                    src="images/rock.svg"
+                    alt="Rock"
+                >
+
+                <span>ROCK</span>
 
             </button>
 
-            <button class="choice-btn" data-choice="paper">
 
-                <img src="images/paper.svg" alt="Paper">
+            <button
+                class="choice-btn"
+                data-choice="paper"
+            >
 
-                <span>Paper</span>
+                <img
+                    src="images/paper.svg"
+                    alt="Paper"
+                >
+
+                <span>PAPER</span>
 
             </button>
 
-            <button class="choice-btn" data-choice="scissors">
 
-                <img src="images/scissors.svg" alt="Scissors">
+            <button
+                class="choice-btn"
+                data-choice="scissors"
+            >
 
-                <span>Scissors</span>
+                <img
+                    src="images/scissors.svg"
+                    alt="Scissors"
+                >
+
+                <span>SCISSORS</span>
 
             </button>
 
         </div>
 
+
+        <!-- KEYBOARD -->
+
         <p class="keyboard-info">
-            Keyboard: R · P · S
+            KEYBOARD: R · P · S
         </p>
 
-        <button id="quit-btn" class="secondary">
-            Back to Home
+
+        <!-- QUIT -->
+
+        <button
+            id="quit-btn"
+            class="secondary"
+        >
+            BACK TO HOME
         </button>
 
     </section>
 
 
-    <!-- GAME OVER SCREEN -->
+    <!-- =====================================
+         GAME OVER
+    ====================================== -->
+
     <section id="game-over-screen" class="screen">
 
-        <h1 id="game-over-title">Game Over!</h1>
+        <h1 id="game-over-title">
+            GAME OVER!
+        </h1>
+
 
         <p id="final-message"></p>
 
+
+        <!-- FINAL SCORE -->
+
         <div class="final-score">
 
-            <h2>Final Match Score</h2>
+            <h2>FINAL MATCH SCORE</h2>
 
             <p>
+
                 <span id="final-player-score">0</span>
+
                 -
+
                 <span id="final-computer-score">0</span>
+
             </p>
 
         </div>
 
+
+        <!-- EARNED POINTS -->
+
         <div class="final-score">
 
-            <h2>Points Earned This Match</h2>
+            <h2>POINTS EARNED THIS MATCH</h2>
 
             <p>
                 <span id="match-points-earned">0</span>
@@ -412,19 +850,35 @@
 
         </div>
 
-        <button id="restart-btn">
-            Play Again
+
+        <!-- PLAY AGAIN -->
+
+        <button
+            id="restart-btn"
+            class="main-button"
+        >
+            PLAY AGAIN
         </button>
 
-        <button id="menu-btn" class="secondary">
-            Back to Home
+
+        <!-- HOME -->
+
+        <button
+            id="menu-btn"
+            class="secondary"
+        >
+            BACK TO HOME
         </button>
 
     </section>
 
 </div>
 
+
+<!-- JAVASCRIPT -->
+
 <script src="script.js"></script>
 
 </body>
+
 </html>
