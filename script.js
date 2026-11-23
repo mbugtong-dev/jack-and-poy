@@ -1,3 +1,4 @@
+// account system
 let currentUser = null;
 let isCreatingAccount = false;
 
@@ -5,12 +6,14 @@ const users = JSON.parse(
     localStorage.getItem("luckyJackUsers") || "{}"
 );
 
+// screen elements
 const loginScreen = document.getElementById("login-screen");
 const homeScreen = document.getElementById("home-screen");
 const mechanicsScreen = document.getElementById("mechanics-screen");
 const gameScreen = document.getElementById("game-screen");
 const gameOverScreen = document.getElementById("game-over-screen");
 
+// login and registration elements
 const usernameInput = document.getElementById("username-input");
 const passwordInput = document.getElementById("password-input");
 
@@ -19,6 +22,7 @@ const authTitle = document.getElementById("auth-title");
 const authMessage = document.getElementById("auth-message");
 const toggleAuthButton = document.getElementById("toggle-auth");
 
+// sidebar and navigation elements
 const sidebar = document.getElementById("sidebar");
 const settingsButton = document.getElementById("settings-btn");
 const sidebarSettingsButton = document.getElementById("sidebar-settings-btn");
@@ -27,6 +31,7 @@ const profileDropdown = document.getElementById("profile-dropdown");
 const informationButton = document.getElementById("information-btn");
 const informationPanel = document.getElementById("information-panel");
 
+// score and round displays
 const roundNumberDisplay = document.getElementById("round-number");
 const playerScoreDisplay = document.getElementById("player-score");
 const computerScoreDisplay = document.getElementById("computer-score");
@@ -35,62 +40,80 @@ const computerPointsDisplay = document.getElementById("computer-points");
 const playerStreakDisplay = document.getElementById("player-streak");
 const computerStreakDisplay = document.getElementById("computer-streak");
 
+// player and computer move displays
 const playerHand = document.getElementById("player-hand");
 const computerHand = document.getElementById("computer-hand");
 
+// game messages and countdown
 const resultDisplay = document.getElementById("result");
 const roundMessage = document.getElementById("round-message");
 const countdownDisplay = document.getElementById("countdown");
 const abilityMessage = document.getElementById("ability-message");
 
+// ability elements
 const lockOptions = document.getElementById("lock-options");
 const reverseBanner = document.getElementById("reverse-banner");
 
+// game buttons
 const choiceButtons = document.querySelectorAll(".choice-btn");
 const lockButtons = document.querySelectorAll(".lock-btn");
 
+// peek ability elements
 const peekButton = document.getElementById("peek-btn");
 const peekResult = document.getElementById("peek-result");
 
+// game scores
 let playerScore = 0;
 let computerScore = 0;
 
+// game points
 let playerPoints = 0;
 let computerPoints = 0;
 let matchPointsEarned = 0;
 
+// round tracking
 let roundNumber = 1;
 
+// win streak tracking
 let playerStreak = 0;
 let computerStreak = 0;
 
+// player and computer choices
 let playerChoice = null;
 let computerChoice = null;
 
+// special ability variables
 let playerAbility = null;
 let playerLockChoice = null;
 
+// reverse ability state
 let reverseActive = false;
 
+// peek ability state
 let peekUsed = false;
 let peekChoice = null;
 
+// game state
 let roundActive = false;
 let gameEnded = false;
 let bawiWindow = false;
 
+// ability unlock streak requirement
 let nextAbilityStreak = 3;
 
+// game timers
 let countdownTimer = null;
 let bawiTimer = null;
 let animationTimer = null;
 
+// move images
 const moveImages = {
     rock: "images/rock.svg",
     paper: "images/paper.svg",
     scissors: "images/scissors.svg"
 };
 
+// screen navigation
 function showScreen(screen) {
     document.querySelectorAll(".screen").forEach(function(item) {
         item.classList.remove("active");
@@ -100,6 +123,7 @@ function showScreen(screen) {
     closeSidebarPanels();
 }
 
+// login and registration toggle
 toggleAuthButton.addEventListener("click", function() {
     isCreatingAccount = !isCreatingAccount;
 
@@ -118,20 +142,24 @@ toggleAuthButton.addEventListener("click", function() {
     authMessage.textContent = "";
 });
 
+// authentication button event
 authButton.addEventListener("click", handleAuthentication);
 
+// login using enter key
 passwordInput.addEventListener("keydown", function(event) {
     if (event.key === "Enter") {
         handleAuthentication();
     }
 });
 
+// move to password field using enter key
 usernameInput.addEventListener("keydown", function(event) {
     if (event.key === "Enter") {
         passwordInput.focus();
     }
 });
 
+// account authentication
 function handleAuthentication() {
     const username = usernameInput.value.trim();
     const password = passwordInput.value.trim();
@@ -142,6 +170,7 @@ function handleAuthentication() {
         return;
     }
 
+    // account registration
     if (isCreatingAccount) {
         if (users[username]) {
             authMessage.textContent = "Username already exists.";
@@ -167,6 +196,7 @@ function handleAuthentication() {
         return;
     }
 
+    // account login
     if (!users[username]) {
         authMessage.textContent = "Account does not exist.";
         return;
@@ -179,6 +209,7 @@ function handleAuthentication() {
 
     currentUser = username;
 
+    // initialize missing user data
     if (!Array.isArray(users[currentUser].history)) {
         users[currentUser].history = [];
     }
@@ -193,6 +224,7 @@ function handleAuthentication() {
     showHomeScreen();
 }
 
+// save user data to local storage
 function saveUsers() {
     localStorage.setItem(
         "luckyJackUsers",
@@ -200,6 +232,7 @@ function saveUsers() {
     );
 }
 
+// display home screen
 function showHomeScreen() {
     if (!currentUser) {
         showScreen(loginScreen);
@@ -216,30 +249,36 @@ function showHomeScreen() {
     showScreen(homeScreen);
 }
 
+// close sidebar panels
 function closeSidebarPanels() {
     sidebar.classList.remove("open");
     profileDropdown.classList.add("hidden");
     informationPanel.classList.add("hidden");
 }
 
+// settings sidebar toggle
 settingsButton.addEventListener("click", function() {
     sidebar.classList.toggle("open");
     profileDropdown.classList.add("hidden");
     informationPanel.classList.add("hidden");
 });
 
+// close settings sidebar
 sidebarSettingsButton.addEventListener("click", closeSidebarPanels);
 
+// profile dropdown toggle
 profileButton.addEventListener("click", function() {
     profileDropdown.classList.toggle("hidden");
     informationPanel.classList.add("hidden");
 });
 
+// information panel toggle
 informationButton.addEventListener("click", function() {
     informationPanel.classList.toggle("hidden");
     profileDropdown.classList.add("hidden");
 });
 
+// display website creation date
 document.getElementById("creation-date").textContent =
     new Date().toLocaleDateString("en-PH", {
         year: "numeric",
@@ -247,6 +286,7 @@ document.getElementById("creation-date").textContent =
         day: "numeric"
     });
 
+// logout function
 document.getElementById("logout-btn").addEventListener("click", function() {
     stopGameTimers();
 
@@ -260,11 +300,13 @@ document.getElementById("logout-btn").addEventListener("click", function() {
     showScreen(loginScreen);
 });
 
+// home screen navigation
 document.getElementById("home-start-btn").addEventListener(
     "click",
     startGame
 );
 
+// mechanics screen navigation
 document.getElementById("home-mechanics-btn").addEventListener(
     "click",
     function() {
@@ -272,11 +314,13 @@ document.getElementById("home-mechanics-btn").addEventListener(
     }
 );
 
+// return to home from mechanics
 document.getElementById("mechanics-back-btn").addEventListener(
     "click",
     showHomeScreen
 );
 
+// random move selection
 function randomChoice() {
     const moves = ["rock", "paper", "scissors"];
 
@@ -285,6 +329,7 @@ function randomChoice() {
     ];
 }
 
+// calculate available player points
 function getAvailablePoints() {
     if (!currentUser) {
         return playerPoints;
@@ -293,12 +338,14 @@ function getAvailablePoints() {
     return users[currentUser].points + playerPoints;
 }
 
+// stop all game timers
 function stopGameTimers() {
     clearInterval(countdownTimer);
     clearInterval(bawiTimer);
     clearTimeout(animationTimer);
 }
 
+// initialize a new game
 function startGame() {
     if (!currentUser) {
         showScreen(loginScreen);
@@ -307,6 +354,7 @@ function startGame() {
 
     stopGameTimers();
 
+    // reset scores and points
     playerScore = 0;
     computerScore = 0;
 
@@ -314,14 +362,17 @@ function startGame() {
     computerPoints = 0;
     matchPointsEarned = 0;
 
+    // reset round and streaks
     roundNumber = 1;
 
     playerStreak = 0;
     computerStreak = 0;
 
+    // reset player and computer choices
     playerChoice = null;
     computerChoice = null;
 
+    // reset abilities
     playerAbility = null;
     playerLockChoice = null;
 
@@ -330,6 +381,7 @@ function startGame() {
     peekUsed = false;
     peekChoice = null;
 
+    // reset game states
     roundActive = false;
     gameEnded = false;
     bawiWindow = false;
@@ -345,6 +397,7 @@ function startGame() {
     resetRound();
 }
 
+// reset current round
 function resetRound() {
     stopGameTimers();
 
@@ -361,16 +414,20 @@ function resetRound() {
     roundActive = false;
     bawiWindow = false;
 
+    // enable move buttons
     choiceButtons.forEach(function(button) {
         button.disabled = false;
     });
 
+    // hide ability elements
     lockOptions.classList.add("hidden");
     reverseBanner.classList.add("hidden");
     peekResult.classList.add("hidden");
 
+    // reset countdown
     countdownDisplay.textContent = "";
 
+    // reset hand images
     playerHand.src = moveImages.rock;
     computerHand.src = moveImages.rock;
 
@@ -380,6 +437,7 @@ function resetRound() {
     playerHand.classList.remove("shake");
     computerHand.classList.remove("shake");
 
+    // reset round messages
     resultDisplay.textContent = "Choose your move!";
     resultDisplay.style.color = "";
 
@@ -393,6 +451,7 @@ function resetRound() {
     prepareAbility();
 }
 
+// prepare player's unlocked ability
 function prepareAbility() {
     lockOptions.classList.add("hidden");
     reverseBanner.classList.add("hidden");
@@ -408,6 +467,7 @@ function prepareAbility() {
         return;
     }
 
+    // kandado ability
     if (playerAbility === "Kandado") {
         abilityMessage.textContent =
             "KANDADO! Choose a move to lock for the computer.";
@@ -419,11 +479,13 @@ function prepareAbility() {
         });
     }
 
+    // bawi ability
     if (playerAbility === "Bawi") {
         abilityMessage.textContent =
             "BAWI is ready! You can change your move during the Bawi window.";
     }
 
+    // baligtaran ability
     if (playerAbility === "Baligtaran") {
         reverseActive = true;
         reverseBanner.classList.remove("hidden");
@@ -435,6 +497,7 @@ function prepareAbility() {
     updatePeekButton();
 }
 
+// kandado move locking
 lockButtons.forEach(function(button) {
     button.addEventListener("click", function() {
         if (playerAbility !== "Kandado" || roundActive) {
@@ -458,6 +521,7 @@ lockButtons.forEach(function(button) {
     });
 });
 
+// generate computer move
 function generateComputerChoice() {
     let availableMoves = [
         "rock",
@@ -465,18 +529,21 @@ function generateComputerChoice() {
         "scissors"
     ];
 
+    // remove locked move from computer options
     if (playerLockChoice) {
         availableMoves = availableMoves.filter(function(move) {
             return move !== playerLockChoice;
         });
     }
 
+    // randomize computer move
     computerChoice =
         availableMoves[
             Math.floor(Math.random() * availableMoves.length)
         ];
 }
 
+// peek ability button state
 function updatePeekButton() {
     const hasEnoughPoints = getAvailablePoints() >= 20;
     const hasRequiredStreak = playerStreak >= 2;
@@ -494,13 +561,16 @@ function updatePeekButton() {
     );
 }
 
+// peek ability event
 peekButton.addEventListener("click", usePeek);
 
+// peek ability function
 function usePeek() {
     if (roundActive || peekUsed || gameEnded) {
         return;
     }
 
+    // check peek requirements
     if (playerStreak < 2) {
         roundMessage.textContent =
             "Win 2 consecutive rounds to unlock Peek.";
@@ -517,10 +587,12 @@ function usePeek() {
         return;
     }
 
+    // generate computer move if not yet generated
     if (!computerChoice) {
         generateComputerChoice();
     }
 
+    // deduct peek cost
     const savedPoints = users[currentUser].points;
 
     if (savedPoints >= 20) {
@@ -536,6 +608,7 @@ function usePeek() {
 
     peekUsed = true;
 
+    // generate decoy move
     const decoyMoves = [
         "rock",
         "paper",
@@ -549,6 +622,7 @@ function usePeek() {
             Math.floor(Math.random() * decoyMoves.length)
         ];
 
+    // arrange correct move and decoy
     const options = [
         computerChoice,
         decoy
@@ -558,6 +632,7 @@ function usePeek() {
         options.reverse();
     }
 
+    // display peek choices
     document.getElementById("peek-image-1").src =
         moveImages[options[0]];
 
@@ -579,6 +654,7 @@ function usePeek() {
     updatePeekButton();
 }
 
+// player move button events
 choiceButtons.forEach(function(button) {
     button.addEventListener("click", function() {
         const choice = button.dataset.choice;
@@ -592,6 +668,7 @@ choiceButtons.forEach(function(button) {
     });
 });
 
+// keyboard move controls
 document.addEventListener("keydown", function(event) {
     if (!gameScreen.classList.contains("active")) {
         return;
@@ -605,8 +682,13 @@ document.addEventListener("keydown", function(event) {
 
     let choice = null;
 
+    // r for rock
     if (key === "r") choice = "rock";
+
+    // p for paper
     if (key === "p") choice = "paper";
+
+    // s for scissors
     if (key === "s") choice = "scissors";
 
     if (!choice) {
@@ -621,11 +703,13 @@ document.addEventListener("keydown", function(event) {
     playRound(choice);
 });
 
+// start a round
 function playRound(choice) {
     if (roundActive || gameEnded) {
         return;
     }
 
+    // require kandado selection
     if (playerAbility === "Kandado" && !playerLockChoice) {
         roundMessage.textContent =
             "Choose a move to lock before playing.";
@@ -635,18 +719,21 @@ function playRound(choice) {
 
     playerChoice = choice;
 
+    // generate computer move
     if (!computerChoice) {
         generateComputerChoice();
     }
 
     roundActive = true;
 
+    // disable move buttons
     choiceButtons.forEach(function(button) {
         button.disabled = true;
     });
 
     updatePeekButton();
 
+    // prepare hand animations
     playerHand.src = moveImages.rock;
     computerHand.src = moveImages.rock;
 
@@ -656,6 +743,7 @@ function playRound(choice) {
     resultDisplay.textContent = "READY...";
     roundMessage.textContent = "The battle is beginning!";
 
+    // start countdown
     let count = 3;
 
     countdownDisplay.textContent = count;
@@ -678,6 +766,7 @@ function playRound(choice) {
     }, 700);
 }
 
+// reveal player and computer moves
 function revealMoves() {
     playerHand.src = moveImages[playerChoice];
     computerHand.src = moveImages[computerChoice];
@@ -695,6 +784,7 @@ function revealMoves() {
 
     countdownDisplay.textContent = "";
 
+    // activate bawi ability
     if (playerAbility === "Bawi") {
         showBawiWindow();
     } else {
@@ -704,6 +794,7 @@ function revealMoves() {
     }
 }
 
+// bawi move changing window
 function showBawiWindow() {
     bawiWindow = true;
 
@@ -714,10 +805,12 @@ function showBawiWindow() {
 
     let seconds = 2;
 
+    // enable move buttons during bawi
     choiceButtons.forEach(function(button) {
         button.disabled = false;
     });
 
+    // bawi countdown
     bawiTimer = setInterval(function() {
         seconds--;
 
@@ -742,6 +835,7 @@ function showBawiWindow() {
     }, 1000);
 }
 
+// change player's move during bawi
 function changeBawiChoice(choice) {
     if (!bawiWindow || gameEnded) {
         return;
@@ -758,6 +852,7 @@ function changeBawiChoice(choice) {
         "!";
 }
 
+// determine round winner and update scores
 function resolveRound() {
     clearInterval(countdownTimer);
     clearInterval(bawiTimer);
@@ -765,17 +860,20 @@ function resolveRound() {
 
     bawiWindow = false;
 
+    // disable move buttons
     choiceButtons.forEach(function(button) {
         button.disabled = true;
     });
 
     const abilityUsedThisRound = playerAbility;
 
+    // determine normal round outcome
     let outcome = getWinner(
         playerChoice,
         computerChoice
     );
 
+    // reverse outcome for baligtaran
     if (reverseActive) {
         if (outcome === "win") {
             outcome = "lose";
@@ -784,6 +882,7 @@ function resolveRound() {
         }
     }
 
+    // player wins round
     if (outcome === "win") {
         playerScore++;
 
@@ -802,6 +901,8 @@ function resolveRound() {
             " beats " +
             computerChoice.toUpperCase() +
             "! +10 points";
+
+    // computer wins round
     } else if (outcome === "lose") {
         computerScore++;
 
@@ -819,6 +920,8 @@ function resolveRound() {
             " beats " +
             playerChoice.toUpperCase() +
             "!";
+
+    // draw round
     } else {
         playerPoints += 5;
         computerPoints += 5;
@@ -834,10 +937,12 @@ function resolveRound() {
             "! +5 points each.";
     }
 
+    // consume special ability
     if (abilityUsedThisRound) {
         playerAbility = null;
     }
 
+    // reset ability states
     playerLockChoice = null;
     reverseActive = false;
 
@@ -847,12 +952,15 @@ function resolveRound() {
     updateGameDisplay();
     updatePeekButton();
 
+    // check ability unlock
     checkAbilityUnlock();
 
+    // check match winner
     if (checkGameOver()) {
         return;
     }
 
+    // move to next round
     roundNumber++;
 
     animationTimer = setTimeout(function() {
@@ -860,6 +968,7 @@ function resolveRound() {
     }, 1800);
 }
 
+// determine winner using rock paper scissors rules
 function getWinner(player, computer) {
     if (player === computer) {
         return "draw";
@@ -876,6 +985,7 @@ function getWinner(player, computer) {
     return "lose";
 }
 
+// check if player unlocks an ability
 function checkAbilityUnlock() {
     if (
         playerStreak >= nextAbilityStreak &&
@@ -886,6 +996,7 @@ function checkAbilityUnlock() {
     }
 }
 
+// randomly assign special ability
 function unlockAbility() {
     const abilities = [
         "Kandado",
@@ -908,6 +1019,7 @@ function unlockAbility() {
         "Your next round will use your special ability.";
 }
 
+// check if match is finished
 function checkGameOver() {
     const playerWon =
         playerScore >= 5 &&
@@ -930,10 +1042,12 @@ function checkGameOver() {
     return true;
 }
 
+// display final game results
 function finishGame(playerWon) {
     const title = document.getElementById("game-over-title");
     const finalMessage = document.getElementById("final-message");
 
+    // display match result
     if (playerWon) {
         title.textContent = "YOU WIN!";
 
@@ -946,6 +1060,7 @@ function finishGame(playerWon) {
             "Better luck next time!";
     }
 
+    // display final scores and points
     document.getElementById("final-player-score").textContent =
         playerScore;
 
@@ -955,8 +1070,10 @@ function finishGame(playerWon) {
     document.getElementById("match-points-earned").textContent =
         matchPointsEarned;
 
+    // save earned points
     users[currentUser].points += playerPoints;
 
+    // save match history
     users[currentUser].history.unshift({
         date: new Date().toLocaleDateString(),
         playerScore: playerScore,
@@ -965,6 +1082,7 @@ function finishGame(playerWon) {
         result: playerWon ? "WIN" : "LOSS"
     });
 
+    // limit history to 10 games
     users[currentUser].history =
         users[currentUser].history.slice(0, 10);
 
@@ -974,6 +1092,7 @@ function finishGame(playerWon) {
     showScreen(gameOverScreen);
 }
 
+// update game displays
 function updateGameDisplay() {
     playerScoreDisplay.textContent = playerScore;
     computerScoreDisplay.textContent = computerScore;
@@ -993,6 +1112,7 @@ function updateGameDisplay() {
     roundNumberDisplay.textContent =
         roundNumber;
 
+    // update total user points
     if (currentUser) {
         document.getElementById("total-points").textContent =
             users[currentUser].points;
@@ -1001,6 +1121,7 @@ function updateGameDisplay() {
     updatePeekButton();
 }
 
+// display game history
 function updateHistory() {
     if (!currentUser) {
         return;
@@ -1009,6 +1130,7 @@ function updateHistory() {
     const historyList = document.getElementById("history-list");
     const history = users[currentUser].history;
 
+    // display empty history
     if (!history || history.length === 0) {
         historyList.innerHTML =
             "<p>No games played yet.</p>";
@@ -1018,11 +1140,13 @@ function updateHistory() {
 
     historyList.innerHTML = "";
 
+    // create history items
     history.forEach(function(game) {
         const item = document.createElement("div");
 
         item.classList.add("history-item");
 
+        // apply result styling
         if (game.result === "WIN") {
             item.classList.add("history-win");
         } else if (game.result === "LOSS") {
@@ -1031,9 +1155,11 @@ function updateHistory() {
             item.classList.add("history-draw");
         }
 
+        // display match date
         const date = document.createElement("p");
         date.textContent = game.date;
 
+        // display match result and score
         const score = document.createElement("p");
         score.textContent =
             game.result +
@@ -1043,10 +1169,12 @@ function updateHistory() {
             game.computerScore +
             ")";
 
+        // display points earned
         const points = document.createElement("p");
         points.textContent =
             "Points earned: " + game.points;
 
+        // add information to history item
         item.appendChild(date);
         item.appendChild(score);
         item.appendChild(points);
@@ -1055,6 +1183,7 @@ function updateHistory() {
     });
 }
 
+// quit game and return home
 document.getElementById("quit-btn").addEventListener("click", function() {
     stopGameTimers();
 
@@ -1065,14 +1194,17 @@ document.getElementById("quit-btn").addEventListener("click", function() {
     showHomeScreen();
 });
 
+// restart game
 document.getElementById("restart-btn").addEventListener(
     "click",
     startGame
 );
 
+// return to home menu
 document.getElementById("menu-btn").addEventListener(
     "click",
     showHomeScreen
 );
 
+// display login screen when website loads
 showScreen(loginScreen);
