@@ -697,6 +697,10 @@ img {
     color: var(--maroon);
 }
 
+#computer-hand {
+    transform: scaleX(-1);
+}
+
 #result {
     font-size: clamp(25px, 5vw, 40px);
     color: var(--maroon);
@@ -1003,5 +1007,53 @@ img {
 
     .peek-options {
         gap: 10px;
+    }
+}
+
+.hand-display img {
+    transition: transform 0.2s ease;
+}
+
+.hand-display img.shake {
+    animation: handShake 0.4s ease-in-out infinite;
+}
+
+@keyframes handShake {
+    0%, 100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+
+    25% {
+        transform: translate(-25px, -25px) rotate(-8deg);
+    }
+
+    50% {
+        transform: translate(25px, 25px) rotate(8deg);
+    }
+
+    75% {
+        transform: translate(-25px, -25px) rotate(-8deg);
+    }
+}
+
+#computer-hand.shake {
+    animation: computerShake 0.4s ease-in-out infinite;
+}
+
+@keyframes computerShake {
+    0%, 100% {
+        transform: scaleX(-1) translate(0, 0) rotate(0deg);
+    }
+
+    25% {
+        transform: scaleX(-1) translate(-25px, -25px) rotate(-8deg);
+    }
+
+    50% {
+        transform: scaleX(-1) translate(25px, 25px) rotate(8deg);
+    }
+
+    75% {
+        transform: scaleX(-1) translate(-25px, -25px) rotate(-8deg);
     }
 }
