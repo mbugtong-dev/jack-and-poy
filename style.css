@@ -1,37 +1,15 @@
-
-/* ==========================================
-   LUCKY JACK AND POY
-   COMPLETE CSS
-========================================== */
-
-
-/* ==========================================
-   ROOT VARIABLES
-========================================== */
-
 :root {
     --background: #efd0aa;
-
     --yellow: #ffcc28;
     --yellow-dark: #f2a900;
-
     --maroon: #8d2528;
     --maroon-dark: #743027;
-
     --orange: #f28a20;
-
     --gray: #454545;
     --gray-dark: #302c2c;
-
     --white: #fff4df;
-
     --red: #e84141;
 }
-
-
-/* ==========================================
-   GLOBAL RESET
-========================================== */
 
 * {
     box-sizing: border-box;
@@ -57,11 +35,7 @@ input {
 
 button {
     cursor: pointer;
-
-    transition:
-        transform 0.2s ease,
-        background 0.2s ease,
-        box-shadow 0.2s ease;
+    transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 
 button:hover {
@@ -76,21 +50,11 @@ img {
     max-width: 100%;
 }
 
-
-/* ==========================================
-   MAIN CONTAINER
-========================================== */
-
 .container {
     width: 100%;
     min-height: 100vh;
     position: relative;
 }
-
-
-/* ==========================================
-   SCREEN MANAGEMENT
-========================================== */
 
 .screen {
     display: none;
@@ -102,22 +66,13 @@ img {
     display: flex;
 }
 
-
-/* ==========================================
-   BUTTONS
-========================================== */
-
 .main-button {
     padding: 18px 30px;
-
     background: var(--yellow);
     color: var(--maroon);
-
     border: 4px solid var(--maroon);
     border-radius: 18px;
-
     box-shadow: 0 6px 0 var(--maroon-dark);
-
     font-size: 25px;
 }
 
@@ -128,24 +83,16 @@ img {
 
 .secondary {
     padding: 14px 24px;
-
     background: var(--maroon);
     color: white;
-
     border: 3px solid var(--yellow);
     border-radius: 15px;
-
     font-size: 18px;
 }
 
 .secondary:hover {
     background: var(--orange);
 }
-
-
-/* ==========================================
-   LOGIN SCREEN
-========================================== */
 
 #login-screen {
     justify-content: center;
@@ -156,11 +103,9 @@ img {
 .login-content {
     width: 100%;
     max-width: 600px;
-
     display: flex;
     flex-direction: column;
     align-items: center;
-
     gap: 35px;
 }
 
@@ -171,37 +116,27 @@ img {
 .game-logo h1 {
     font-family: 'Lilita One', cursive;
     font-size: clamp(35px, 7vw, 65px);
-
     color: var(--yellow);
-
     -webkit-text-stroke: 3px var(--maroon);
-
     text-shadow: 0 7px 0 var(--maroon-dark);
 }
 
 .game-logo p {
     margin-top: 15px;
-
     font-size: 15px;
     color: var(--maroon);
-
     letter-spacing: 3px;
 }
 
 .auth-box {
     width: 100%;
     padding: 35px;
-
     display: flex;
     flex-direction: column;
-
     gap: 18px;
-
     background: var(--gray);
-
     border: 5px solid var(--maroon);
     border-radius: 25px;
-
     box-shadow: 0 8px 0 var(--maroon-dark);
 }
 
@@ -209,19 +144,15 @@ img {
     color: var(--yellow);
     font-size: 30px;
     text-align: center;
-
     text-shadow: 3px 3px var(--maroon);
 }
 
 .auth-box input {
     width: 100%;
     padding: 15px;
-
     background: white;
-
     border: 3px solid var(--maroon);
     border-radius: 12px;
-
     font-size: 18px;
     outline: none;
 }
@@ -241,30 +172,20 @@ img {
     text-align: center;
 }
 
-
-/* ==========================================
-   HOME SCREEN
-========================================== */
-
 #home-screen {
     position: relative;
-
     justify-content: center;
     align-items: center;
-
     padding: 40px 20px;
-
     overflow: hidden;
 }
 
 .home-content {
     width: 100%;
     max-width: 850px;
-
     display: flex;
     flex-direction: column;
     align-items: center;
-
     gap: 30px;
 }
 
@@ -275,40 +196,28 @@ img {
 .page-header h1 {
     font-family: 'Lilita One', cursive;
     font-size: clamp(35px, 6vw, 70px);
-
     color: var(--yellow);
-
     -webkit-text-stroke: 3px var(--maroon);
-
     text-shadow: 0 7px 0 var(--maroon-dark);
 }
 
 .subtitle {
     margin-top: 10px;
-
     font-size: 18px;
     letter-spacing: 3px;
 }
-
-
-/* ==========================================
-   WELCOME ART
-========================================== */
 
 .welcome-art {
     display: flex;
     justify-content: center;
     align-items: center;
-
     gap: 25px;
 }
 
 .welcome-art img {
     width: clamp(80px, 15vw, 150px);
     height: clamp(80px, 15vw, 150px);
-
     object-fit: contain;
-
     animation: floating 2s ease-in-out infinite;
 }
 
@@ -321,28 +230,19 @@ img {
 }
 
 @keyframes floating {
-    0%,
-    100% {
+    0%, 100% {
         transform: translateY(0);
     }
-
     50% {
         transform: translateY(-12px);
     }
 }
 
-
-/* ==========================================
-   HOME BUTTONS
-========================================== */
-
 .home-buttons {
     width: 100%;
-
     display: flex;
     justify-content: center;
     align-items: center;
-
     gap: 20px;
     flex-wrap: wrap;
 }
@@ -351,28 +251,17 @@ img {
     min-width: 220px;
 }
 
-
-/* ==========================================
-   SETTINGS BUTTON
-========================================== */
-
 .settings-btn {
     position: absolute;
-
     top: 20px;
     left: 20px;
-
     z-index: 1002;
-
     width: 75px;
     height: 75px;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     background: var(--yellow);
-
     border: 4px solid var(--maroon);
     border-radius: 50%;
 }
@@ -380,7 +269,6 @@ img {
 .settings-btn img {
     width: 100px;
     height: 100px;
-
     object-fit: contain;
 }
 
@@ -389,40 +277,23 @@ img {
     transform: rotate(15deg);
 }
 
-
-/* ==========================================
-   SIDEBAR
-========================================== */
-
 .sidebar {
     position: fixed;
-
     top: 0;
     left: 0;
-
     z-index: 1001;
-
     width: 300px;
     max-width: 85%;
     height: 100vh;
-
     padding: 25px 20px;
-
     display: flex;
     flex-direction: column;
-
     gap: 20px;
-
     background: #6b5c54;
-
     overflow-y: auto;
-
     transform: translateX(-100%);
     visibility: hidden;
-
-    transition:
-        transform 0.3s ease,
-        visibility 0.3s ease;
+    transition: transform 0.3s ease, visibility 0.3s ease;
 }
 
 .sidebar.open {
@@ -439,13 +310,10 @@ img {
 .sidebar-settings-btn {
     width: 45px;
     height: 45px;
-
     display: flex;
     justify-content: center;
     align-items: center;
-
     background: var(--yellow);
-
     border: 4px solid var(--maroon);
     border-radius: 50%;
 }
@@ -453,7 +321,6 @@ img {
 .sidebar-settings-btn img {
     width: 80px;
     height: 80px;
-
     object-fit: contain;
 }
 
@@ -464,27 +331,21 @@ img {
 .sidebar-btn {
     width: 100%;
     min-height: 65px;
-
     display: flex;
     justify-content: flex-start;
     align-items: center;
-
     gap: 15px;
     padding: 10px 15px;
-
     background: transparent;
     border: none;
-
     color: var(--yellow);
     font-size: 22px;
-
     text-shadow: 2px 3px var(--maroon);
 }
 
 .sidebar-btn img {
     width: 80px;
     height: 80px;
-
     object-fit: contain;
 }
 
@@ -492,22 +353,13 @@ img {
     transform: translateX(5px);
 }
 
-
-/* ==========================================
-   SIDEBAR DROPDOWNS
-========================================== */
-
 .sidebar-dropdown {
     width: 100%;
-
     margin-top: 10px;
     padding: 15px;
-
     background: var(--gray-dark);
-
     border: 3px solid var(--yellow);
     border-radius: 15px;
-
     color: white;
 }
 
@@ -533,10 +385,8 @@ img {
 .points-card {
     padding: 15px;
     margin-bottom: 20px;
-
     background: var(--maroon);
     border-radius: 12px;
-
     text-align: center;
 }
 
@@ -558,10 +408,8 @@ img {
 .history-item {
     padding: 10px;
     margin-bottom: 10px;
-
     background: #62544c;
     border-radius: 8px;
-
     font-size: 14px;
 }
 
@@ -577,15 +425,9 @@ img {
     color: var(--yellow);
 }
 
-
-/* ==========================================
-   INFORMATION PANEL
-========================================== */
-
 .information-item {
     margin-top: 15px;
     padding: 10px;
-
     background: #62544c;
     border-radius: 10px;
 }
@@ -597,14 +439,8 @@ img {
 .information-btn img {
     width: 80px;
     height: 80px;
-
     object-fit: contain;
 }
-
-
-/* ==========================================
-   LOGOUT
-========================================== */
 
 .logout-btn {
     margin-top: auto;
@@ -615,77 +451,57 @@ img {
     filter: none;
 }
 
-
-/* ==========================================
-   MECHANICS SCREEN
-========================================== */
-
 #mechanics-screen {
     justify-content: center;
     align-items: flex-start;
-
     padding: 40px 20px;
 }
 
 .mechanics-content {
     width: 100%;
     max-width: 950px;
-
     margin: auto;
-
     display: flex;
     flex-direction: column;
     align-items: center;
-
     gap: 25px;
 }
 
 .mechanics-content > h1 {
     text-align: center;
-
     font-size: clamp(35px, 6vw, 65px);
     color: var(--yellow);
-
     -webkit-text-stroke: 3px var(--maroon);
-
     text-shadow: 0 6px 0 var(--maroon-dark);
 }
 
 .mechanics-item {
     width: 100%;
     padding: 25px;
-
     background: var(--gray);
-
     border: 5px solid var(--maroon);
     border-radius: 25px;
-
     box-shadow: 0 7px 0 var(--maroon-dark);
 }
 
 .mechanics-item h2 {
     margin-bottom: 15px;
-
     color: var(--yellow);
     font-size: 28px;
-
     text-shadow: 2px 3px var(--maroon);
 }
 
 .mechanics-item h3 {
     margin-top: 20px;
     margin-bottom: 8px;
-
     color: var(--orange);
     font-size: 22px;
 }
 
 .mechanics-item p {
     margin-bottom: 12px;
-
     color: var(--white);
     font-size: 18px;
-
     line-height: 1.7;
 }
 
@@ -693,27 +509,18 @@ img {
     margin-top: 10px;
 }
 
-
-/* ==========================================
-   GAME SCREEN
-========================================== */
-
 #game-screen {
     flex-direction: column;
     align-items: center;
-
     gap: 20px;
     padding: 30px 20px;
-
     text-align: center;
 }
 
 .game-header h1 {
     font-size: clamp(25px, 5vw, 50px);
     color: var(--yellow);
-
     -webkit-text-stroke: 2px var(--maroon);
-
     text-shadow: 0 5px 0 var(--maroon-dark);
 }
 
@@ -722,32 +529,21 @@ img {
     font-size: 20px;
 }
 
-
-/* ==========================================
-   SCOREBOARD
-========================================== */
-
 .scoreboard {
     width: 100%;
     max-width: 550px;
-
     display: flex;
     justify-content: center;
     align-items: center;
-
     gap: 20px;
 }
 
 .score-box {
     flex: 1;
-
     padding: 15px;
-
     background: var(--gray);
-
     border: 4px solid var(--maroon);
     border-radius: 20px;
-
     box-shadow: 0 5px 0 var(--maroon-dark);
 }
 
@@ -758,9 +554,7 @@ img {
 
 .score-box span {
     display: block;
-
     margin-top: 5px;
-
     color: white;
     font-size: 45px;
 }
@@ -770,24 +564,15 @@ img {
     color: var(--maroon);
 }
 
-
-/* ==========================================
-   ACCUMULATED POINTS
-========================================== */
-
 .points-bar {
     width: 100%;
     max-width: 550px;
-
     display: flex;
     justify-content: space-around;
-
     gap: 15px;
     padding: 12px;
-
     background: var(--maroon);
     border-radius: 15px;
-
     color: white;
 }
 
@@ -796,18 +581,11 @@ img {
     font-size: 22px;
 }
 
-
-/* ==========================================
-   STREAK
-========================================== */
-
 #streak-display {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-
     gap: 10px;
-
     font-size: 16px;
 }
 
@@ -815,29 +593,19 @@ img {
     color: var(--maroon);
 }
 
-
-/* ==========================================
-   ABILITY BOX
-========================================== */
-
 .ability-box {
     width: 100%;
     max-width: 650px;
-
     padding: 15px;
-
     background: var(--gray);
-
     border: 3px solid var(--maroon);
     border-radius: 15px;
-
     color: white;
 }
 
 #ability-message {
     color: var(--yellow);
     font-size: 17px;
-
     line-height: 1.5;
 }
 
@@ -848,12 +616,9 @@ img {
 .lock-btn {
     padding: 10px 15px;
     margin: 5px;
-
     background: var(--yellow);
-
     border: 2px solid var(--maroon);
     border-radius: 10px;
-
     color: var(--maroon);
 }
 
@@ -861,25 +626,15 @@ img {
     background: var(--orange);
 }
 
-
-/* ==========================================
-   REVERSE BANNER
-========================================== */
-
 .reverse-banner {
     width: 100%;
     max-width: 650px;
-
     padding: 15px;
-
     background: var(--red);
-
     border: 4px solid var(--maroon);
     border-radius: 15px;
-
     color: white;
     font-size: 20px;
-
     animation: pulse 1s infinite;
 }
 
@@ -889,39 +644,28 @@ img {
 }
 
 @keyframes pulse {
-    0%,
-    100% {
+    0%, 100% {
         transform: scale(1);
     }
-
     50% {
         transform: scale(1.03);
     }
 }
 
-
-/* ==========================================
-   BATTLE AREA
-========================================== */
-
 .battle {
     width: 100%;
     max-width: 750px;
-
     display: flex;
     justify-content: center;
     align-items: center;
-
     gap: 25px;
 }
 
 .fighter {
     flex: 1;
-
     display: flex;
     flex-direction: column;
     align-items: center;
-
     gap: 15px;
 }
 
@@ -933,23 +677,18 @@ img {
 .hand-display {
     width: clamp(120px, 25vw, 220px);
     height: clamp(120px, 25vw, 220px);
-
     display: flex;
     justify-content: center;
     align-items: center;
-
     background: #fff0d9;
-
     border: 5px solid var(--maroon);
     border-radius: 25px;
-
     overflow: hidden;
 }
 
 .hand-display img {
     width: 85%;
     height: 85%;
-
     object-fit: contain;
 }
 
@@ -958,11 +697,6 @@ img {
     color: var(--maroon);
 }
 
-
-/* ==========================================
-   RESULT
-========================================== */
-
 #result {
     font-size: clamp(25px, 5vw, 40px);
     color: var(--maroon);
@@ -970,22 +704,15 @@ img {
 
 #round-message {
     max-width: 700px;
-
     font-size: 17px;
     line-height: 1.6;
 }
 
 #countdown {
     min-height: 25px;
-
     color: var(--maroon);
     font-size: 25px;
 }
-
-
-/* ==========================================
-   PEEK
-========================================== */
 
 .peek-box {
     width: 100%;
@@ -995,12 +722,9 @@ img {
 .peek-btn {
     width: 100%;
     padding: 14px;
-
     background: #454545;
-
     border: 3px solid var(--yellow);
     border-radius: 15px;
-
     color: var(--yellow);
     font-size: 16px;
 }
@@ -1012,12 +736,9 @@ img {
 .peek-result {
     margin-top: 15px;
     padding: 20px;
-
     background: var(--gray);
-
     border: 3px solid var(--maroon);
     border-radius: 15px;
-
     color: white;
 }
 
@@ -1029,14 +750,12 @@ img {
 .peek-options {
     display: flex;
     justify-content: center;
-
     gap: 20px;
 }
 
 .peek-card {
     width: 130px;
     padding: 10px;
-
     background: #62544c;
     border-radius: 12px;
 }
@@ -1044,7 +763,6 @@ img {
 .peek-card img {
     width: 100px;
     height: 100px;
-
     object-fit: contain;
 }
 
@@ -1057,16 +775,10 @@ img {
     color: var(--orange);
 }
 
-
-/* ==========================================
-   PLAYER CHOICES
-========================================== */
-
 .choices {
     display: flex;
     justify-content: center;
     align-items: center;
-
     gap: 20px;
     flex-wrap: wrap;
 }
@@ -1074,20 +786,14 @@ img {
 .choice-btn {
     width: 150px;
     padding: 15px;
-
     display: flex;
     flex-direction: column;
     align-items: center;
-
     gap: 10px;
-
     background: var(--yellow);
-
     border: 4px solid var(--maroon);
     border-radius: 20px;
-
     box-shadow: 0 6px 0 var(--maroon-dark);
-
     color: var(--maroon);
     font-size: 20px;
 }
@@ -1095,7 +801,6 @@ img {
 .choice-btn img {
     width: 100px;
     height: 100px;
-
     object-fit: contain;
 }
 
@@ -1109,38 +814,24 @@ img {
     transform: none;
 }
 
-
-/* ==========================================
-   KEYBOARD INFO
-========================================== */
-
 .keyboard-info {
     font-size: 14px;
     letter-spacing: 2px;
 }
 
-
-/* ==========================================
-   GAME OVER
-========================================== */
-
 #game-over-screen {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
     gap: 25px;
     padding: 30px;
-
     text-align: center;
 }
 
 #game-over-title {
     font-size: clamp(35px, 6vw, 65px);
     color: var(--yellow);
-
     -webkit-text-stroke: 3px var(--maroon);
-
     text-shadow: 0 6px 0 var(--maroon-dark);
 }
 
@@ -1152,14 +843,10 @@ img {
 .final-score {
     width: 100%;
     max-width: 450px;
-
     padding: 20px;
-
     background: var(--gray);
-
     border: 4px solid var(--maroon);
     border-radius: 20px;
-
     box-shadow: 0 6px 0 var(--maroon-dark);
 }
 
@@ -1170,20 +857,11 @@ img {
 
 .final-score p {
     margin-top: 15px;
-
     color: white;
     font-size: 40px;
 }
 
-
-/* ==========================================
-   RESPONSIVE DESIGN
-========================================== */
-
 @media (max-width: 700px) {
-
-    /* HOME */
-
     #home-screen {
         padding: 100px 15px 30px;
     }
@@ -1205,9 +883,6 @@ img {
         max-width: 350px;
     }
 
-
-    /* SETTINGS */
-
     .settings-btn {
         width: 60px;
         height: 60px;
@@ -1223,9 +898,6 @@ img {
         max-width: 300px;
     }
 
-
-    /* MECHANICS */
-
     #mechanics-screen {
         padding: 25px 12px;
     }
@@ -1237,9 +909,6 @@ img {
     .mechanics-item p {
         font-size: 15px;
     }
-
-
-    /* GAME */
 
     #game-screen {
         padding: 20px 12px;
@@ -1308,9 +977,6 @@ img {
         height: 80px;
     }
 
-
-    /* LOGIN */
-
     .auth-box {
         padding: 25px 20px;
     }
@@ -1320,9 +986,7 @@ img {
     }
 }
 
-
 @media (max-width: 400px) {
-
     .choice-btn {
         width: 85px;
     }

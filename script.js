@@ -1,14 +1,3 @@
-
-/* ==========================================
-   LUCKY JACK AND POY
-   COMPLETE JAVASCRIPT
-========================================== */
-
-
-/* ==========================================
-   ACCOUNT SYSTEM
-========================================== */
-
 let currentUser = null;
 let isCreatingAccount = false;
 
@@ -16,19 +5,12 @@ const users = JSON.parse(
     localStorage.getItem("luckyJackUsers") || "{}"
 );
 
-
-/* ==========================================
-   DOM REFERENCES
-========================================== */
-
-// Screens
 const loginScreen = document.getElementById("login-screen");
 const homeScreen = document.getElementById("home-screen");
 const mechanicsScreen = document.getElementById("mechanics-screen");
 const gameScreen = document.getElementById("game-screen");
 const gameOverScreen = document.getElementById("game-over-screen");
 
-// Authentication
 const usernameInput = document.getElementById("username-input");
 const passwordInput = document.getElementById("password-input");
 
@@ -37,7 +19,6 @@ const authTitle = document.getElementById("auth-title");
 const authMessage = document.getElementById("auth-message");
 const toggleAuthButton = document.getElementById("toggle-auth");
 
-// Sidebar
 const sidebar = document.getElementById("sidebar");
 const settingsButton = document.getElementById("settings-btn");
 const sidebarSettingsButton = document.getElementById("sidebar-settings-btn");
@@ -46,7 +27,6 @@ const profileDropdown = document.getElementById("profile-dropdown");
 const informationButton = document.getElementById("information-btn");
 const informationPanel = document.getElementById("information-panel");
 
-// Game
 const roundNumberDisplay = document.getElementById("round-number");
 const playerScoreDisplay = document.getElementById("player-score");
 const computerScoreDisplay = document.getElementById("computer-score");
@@ -71,11 +51,6 @@ const lockButtons = document.querySelectorAll(".lock-btn");
 
 const peekButton = document.getElementById("peek-btn");
 const peekResult = document.getElementById("peek-result");
-
-
-/* ==========================================
-   GAME VARIABLES
-========================================== */
 
 let playerScore = 0;
 let computerScore = 0;
@@ -104,29 +79,17 @@ let roundActive = false;
 let gameEnded = false;
 let bawiWindow = false;
 
-// Ability milestones: 3, 6, 9, 12...
 let nextAbilityStreak = 3;
 
-// Timers
 let countdownTimer = null;
 let bawiTimer = null;
 let animationTimer = null;
-
-
-/* ==========================================
-   GAME ASSETS
-========================================== */
 
 const moveImages = {
     rock: "images/rock.svg",
     paper: "images/paper.svg",
     scissors: "images/scissors.svg"
 };
-
-
-/* ==========================================
-   SCREEN NAVIGATION
-========================================== */
 
 function showScreen(screen) {
     document.querySelectorAll(".screen").forEach(function(item) {
@@ -136,11 +99,6 @@ function showScreen(screen) {
     screen.classList.add("active");
     closeSidebarPanels();
 }
-
-
-/* ==========================================
-   AUTHENTICATION
-========================================== */
 
 toggleAuthButton.addEventListener("click", function() {
     isCreatingAccount = !isCreatingAccount;
@@ -242,11 +200,6 @@ function saveUsers() {
     );
 }
 
-
-/* ==========================================
-   HOME SCREEN
-========================================== */
-
 function showHomeScreen() {
     if (!currentUser) {
         showScreen(loginScreen);
@@ -262,11 +215,6 @@ function showHomeScreen() {
     updateHistory();
     showScreen(homeScreen);
 }
-
-
-/* ==========================================
-   SIDEBAR
-========================================== */
 
 function closeSidebarPanels() {
     sidebar.classList.remove("open");
@@ -292,22 +240,12 @@ informationButton.addEventListener("click", function() {
     profileDropdown.classList.add("hidden");
 });
 
-
-/* ==========================================
-   INFORMATION DATE
-========================================== */
-
 document.getElementById("creation-date").textContent =
     new Date().toLocaleDateString("en-PH", {
         year: "numeric",
         month: "long",
         day: "numeric"
     });
-
-
-/* ==========================================
-   LOGOUT
-========================================== */
 
 document.getElementById("logout-btn").addEventListener("click", function() {
     stopGameTimers();
@@ -321,11 +259,6 @@ document.getElementById("logout-btn").addEventListener("click", function() {
     closeSidebarPanels();
     showScreen(loginScreen);
 });
-
-
-/* ==========================================
-   HOME BUTTONS
-========================================== */
 
 document.getElementById("home-start-btn").addEventListener(
     "click",
@@ -343,11 +276,6 @@ document.getElementById("mechanics-back-btn").addEventListener(
     "click",
     showHomeScreen
 );
-
-
-/* ==========================================
-   GAME UTILITIES
-========================================== */
 
 function randomChoice() {
     const moves = ["rock", "paper", "scissors"];
@@ -370,11 +298,6 @@ function stopGameTimers() {
     clearInterval(bawiTimer);
     clearTimeout(animationTimer);
 }
-
-
-/* ==========================================
-   START GAME
-========================================== */
 
 function startGame() {
     if (!currentUser) {
@@ -421,11 +344,6 @@ function startGame() {
     showScreen(gameScreen);
     resetRound();
 }
-
-
-/* ==========================================
-   RESET ROUND
-========================================== */
 
 function resetRound() {
     stopGameTimers();
@@ -475,11 +393,6 @@ function resetRound() {
     prepareAbility();
 }
 
-
-/* ==========================================
-   SPECIAL ABILITY PREPARATION
-========================================== */
-
 function prepareAbility() {
     lockOptions.classList.add("hidden");
     reverseBanner.classList.add("hidden");
@@ -522,11 +435,6 @@ function prepareAbility() {
     updatePeekButton();
 }
 
-
-/* ==========================================
-   KANDADO
-========================================== */
-
 lockButtons.forEach(function(button) {
     button.addEventListener("click", function() {
         if (playerAbility !== "Kandado" || roundActive) {
@@ -550,11 +458,6 @@ lockButtons.forEach(function(button) {
     });
 });
 
-
-/* ==========================================
-   COMPUTER MOVE
-========================================== */
-
 function generateComputerChoice() {
     let availableMoves = [
         "rock",
@@ -573,11 +476,6 @@ function generateComputerChoice() {
             Math.floor(Math.random() * availableMoves.length)
         ];
 }
-
-
-/* ==========================================
-   PEEK
-========================================== */
 
 function updatePeekButton() {
     const hasEnoughPoints = getAvailablePoints() >= 20;
@@ -623,7 +521,6 @@ function usePeek() {
         generateComputerChoice();
     }
 
-    // Deduct saved points first.
     const savedPoints = users[currentUser].points;
 
     if (savedPoints >= 20) {
@@ -682,11 +579,6 @@ function usePeek() {
     updatePeekButton();
 }
 
-
-/* ==========================================
-   PLAYER MOVE INPUT
-========================================== */
-
 choiceButtons.forEach(function(button) {
     button.addEventListener("click", function() {
         const choice = button.dataset.choice;
@@ -699,11 +591,6 @@ choiceButtons.forEach(function(button) {
         playRound(choice);
     });
 });
-
-
-/* ==========================================
-   KEYBOARD CONTROLS
-========================================== */
 
 document.addEventListener("keydown", function(event) {
     if (!gameScreen.classList.contains("active")) {
@@ -733,11 +620,6 @@ document.addEventListener("keydown", function(event) {
 
     playRound(choice);
 });
-
-
-/* ==========================================
-   PLAY ROUND
-========================================== */
 
 function playRound(choice) {
     if (roundActive || gameEnded) {
@@ -796,11 +678,6 @@ function playRound(choice) {
     }, 700);
 }
 
-
-/* ==========================================
-   REVEAL MOVES
-========================================== */
-
 function revealMoves() {
     playerHand.src = moveImages[playerChoice];
     computerHand.src = moveImages[computerChoice];
@@ -826,11 +703,6 @@ function revealMoves() {
         }, 1500);
     }
 }
-
-
-/* ==========================================
-   BAWI WINDOW
-========================================== */
 
 function showBawiWindow() {
     bawiWindow = true;
@@ -870,11 +742,6 @@ function showBawiWindow() {
     }, 1000);
 }
 
-
-/* ==========================================
-   CHANGE BAWI MOVE
-========================================== */
-
 function changeBawiChoice(choice) {
     if (!bawiWindow || gameEnded) {
         return;
@@ -891,11 +758,6 @@ function changeBawiChoice(choice) {
         "!";
 }
 
-
-/* ==========================================
-   RESOLVE ROUND
-========================================== */
-
 function resolveRound() {
     clearInterval(countdownTimer);
     clearInterval(bawiTimer);
@@ -907,7 +769,6 @@ function resolveRound() {
         button.disabled = true;
     });
 
-    // Keep the round active until the next round begins.
     const abilityUsedThisRound = playerAbility;
 
     let outcome = getWinner(
@@ -922,9 +783,6 @@ function resolveRound() {
             outcome = "win";
         }
     }
-
-
-    // PLAYER WINS
 
     if (outcome === "win") {
         playerScore++;
@@ -944,12 +802,7 @@ function resolveRound() {
             " beats " +
             computerChoice.toUpperCase() +
             "! +10 points";
-    }
-
-
-    // PLAYER LOSES
-
-    else if (outcome === "lose") {
+    } else if (outcome === "lose") {
         computerScore++;
 
         computerPoints += 10;
@@ -966,18 +819,11 @@ function resolveRound() {
             " beats " +
             playerChoice.toUpperCase() +
             "!";
-    }
-
-
-    // DRAW
-
-    else {
+    } else {
         playerPoints += 5;
         computerPoints += 5;
 
         matchPointsEarned += 5;
-
-        // Both streaks remain unchanged.
 
         resultDisplay.textContent = "DRAW!";
         resultDisplay.style.color = "#f2a900";
@@ -987,9 +833,6 @@ function resolveRound() {
             playerChoice.toUpperCase() +
             "! +5 points each.";
     }
-
-
-    // CONSUME USED ABILITY
 
     if (abilityUsedThisRound) {
         playerAbility = null;
@@ -1004,20 +847,11 @@ function resolveRound() {
     updateGameDisplay();
     updatePeekButton();
 
-
-    // CHECK ABILITY UNLOCK
-
     checkAbilityUnlock();
-
-
-    // CHECK MATCH WIN
 
     if (checkGameOver()) {
         return;
     }
-
-
-    // NEXT ROUND
 
     roundNumber++;
 
@@ -1025,11 +859,6 @@ function resolveRound() {
         resetRound();
     }, 1800);
 }
-
-
-/* ==========================================
-   DETERMINE WINNER
-========================================== */
 
 function getWinner(player, computer) {
     if (player === computer) {
@@ -1046,11 +875,6 @@ function getWinner(player, computer) {
 
     return "lose";
 }
-
-
-/* ==========================================
-   SPECIAL ABILITY UNLOCK
-========================================== */
 
 function checkAbilityUnlock() {
     if (
@@ -1084,11 +908,6 @@ function unlockAbility() {
         "Your next round will use your special ability.";
 }
 
-
-/* ==========================================
-   CHECK MATCH WIN
-========================================== */
-
 function checkGameOver() {
     const playerWon =
         playerScore >= 5 &&
@@ -1110,11 +929,6 @@ function checkGameOver() {
 
     return true;
 }
-
-
-/* ==========================================
-   FINISH GAME
-========================================== */
 
 function finishGame(playerWon) {
     const title = document.getElementById("game-over-title");
@@ -1141,7 +955,6 @@ function finishGame(playerWon) {
     document.getElementById("match-points-earned").textContent =
         matchPointsEarned;
 
-    // Save remaining match points.
     users[currentUser].points += playerPoints;
 
     users[currentUser].history.unshift({
@@ -1160,11 +973,6 @@ function finishGame(playerWon) {
 
     showScreen(gameOverScreen);
 }
-
-
-/* ==========================================
-   UPDATE GAME DISPLAY
-========================================== */
 
 function updateGameDisplay() {
     playerScoreDisplay.textContent = playerScore;
@@ -1192,11 +1000,6 @@ function updateGameDisplay() {
 
     updatePeekButton();
 }
-
-
-/* ==========================================
-   GAME HISTORY
-========================================== */
 
 function updateHistory() {
     if (!currentUser) {
@@ -1252,11 +1055,6 @@ function updateHistory() {
     });
 }
 
-
-/* ==========================================
-   QUIT GAME
-========================================== */
-
 document.getElementById("quit-btn").addEventListener("click", function() {
     stopGameTimers();
 
@@ -1267,29 +1065,14 @@ document.getElementById("quit-btn").addEventListener("click", function() {
     showHomeScreen();
 });
 
-
-/* ==========================================
-   PLAY AGAIN
-========================================== */
-
 document.getElementById("restart-btn").addEventListener(
     "click",
     startGame
 );
 
-
-/* ==========================================
-   BACK TO HOME
-========================================== */
-
 document.getElementById("menu-btn").addEventListener(
     "click",
     showHomeScreen
 );
-
-
-/* ==========================================
-   INITIAL SCREEN
-========================================== */
 
 showScreen(loginScreen);
