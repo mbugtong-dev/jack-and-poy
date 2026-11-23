@@ -6,7 +6,7 @@ const users = JSON.parse(
     localStorage.getItem("luckyJackUsers") || "{}"
 );
 
-// screen elements
+//screen elements
 const loginScreen = document.getElementById("login-screen");
 const homeScreen = document.getElementById("home-screen");
 const mechanicsScreen = document.getElementById("mechanics-screen");
